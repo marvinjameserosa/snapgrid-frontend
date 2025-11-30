@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { DINEng, TTFirsNeue, segmentA, DSDIGI } from "@/lib/fonts";
+import { DINEng, TTFirsNeue, segmentA, DSDIGI, segmentAbold } from "@/lib/fonts";
 
 function CameraIcon() {
   return (
@@ -132,8 +132,8 @@ export default function Hero() {
             <span>5G</span>
           </div>
 
-          <div className={`${segmentA.className} space-y-2`}>
-            <h1 className="text-6xl font-extrabold leading-tight tracking-[0.08em] sm:text-8xl md:text-9xl">
+          <div className={`${segmentAbold.className} space-y-2`}>
+            <h1 className="text-6xl font-extrabold tracking-[0.08em] sm:text-8xl md:text-9xl">
               <span className="block text-white">SnapGrid</span>
               <span className="block text-yellow-400">Station</span>
             </h1>
@@ -164,7 +164,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <p className={`${DINEng.className} text-xs uppercase tracking-[0.35em] text-neutral-500`}>
+        <p className={`${DINEng.className} text-xs uppercase tracking-[0.35em] text-neutral-500 pb-15`}>
               Press to begin your photo journey
             </p>
 

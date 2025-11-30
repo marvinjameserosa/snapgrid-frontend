@@ -29,6 +29,13 @@ export const DSDIGI = localFont({
   style: "normal",
 });
 
+export const segmentAbold = localFont({
+  src: "../public/fonts/SegmentAKeyTrial-Bold.otf",
+  variable: "--font-segmentAbold",
+  weight: "400",
+  style: "normal",
+});
+
 export const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
