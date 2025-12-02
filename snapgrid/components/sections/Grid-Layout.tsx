@@ -17,7 +17,15 @@ const stations: Station[] = [
   { id: 4, title: "TRANSIT TERMINAL", subtitle: "Route Maps" },
 ];
 
-// Header badge
+// Journey steps for sidebar
+const journeySteps: Station[] = [
+  { id: 1, title: "STATION 01", subtitle: "SELECT LAYOUT" },
+  { id: 2, title: "STATION 02", subtitle: "CAPTURE PHOTOS" },
+  { id: 3, title: "STATION 03", subtitle: "PHOTO GALLERY" },
+  { id: 4, title: "STATION 04", subtitle: "SHARE RESULTS" },
+];
+
+// are youer badge
 function SmallBadge({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-flex items-center gap-2 px-3 py-1 border border-yellow-400 text-yellow-400 text-xs ">
@@ -195,7 +203,7 @@ export default function GridLayout() {
         </button>
       )}
       <Sidebar
-        stations={stations}
+        stations={journeySteps}
         activeStationId={activeStationId}
         isOpen={isSidebarOpen}
         isDesktop={isDesktop}

@@ -70,43 +70,41 @@ export default function Sidebar({
             SnapGrid <span className="text-yellow-400">Station</span>
           </h2>
           <p className="text-xs text-gray-400 mt-1">Are you lost in the city too?</p>
+          <hr className="border-gray-500"></hr>
         </div>
 
         <div className="mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="rounded-full bg-red-500 text-white font-bold h-10 w-10 flex items-center justify-center">55</div>
-            <div>
-              <p className="text-xs text-gray-300 font-semibold">SUBWAY LINE STATUS</p>
-              <p className="text-xs text-gray-400">—</p>
-            </div>
+          
+          <div className="flex items-center gap-3 mb-6">
+            <div className="rounded-full bg-red-500 text-white font-bold h-10 w-10 flex items-center justify-center text-sm">55</div>
+            <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">SUBWAY LINE STATUS</p>
           </div>
 
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-4">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-yellow-400">
               <path d="M2 12h20" stroke="currentColor" strokeWidth="2" />
             </svg>
-            <h3 className="text-xs text-yellow-400 uppercase tracking-wider font-semibold">Your Journey</h3>
+            <h4 className="text-xs text-yellow-400 uppercase tracking-wider font-semibold">Your Journey</h4>
           </div>
 
-          <nav className="space-y-4 mt-2">
+          <nav className="space-y-4">
             {stations.map((st) => {
               const active = st.id === activeStationId;
               return (
-                <div key={st.id} className="flex items-start gap-4">
-                  <button
-                    onClick={() => onSelect?.(st.id)}
-                    className="mt-1 h-3 w-3 rounded-full bg-yellow-400 flex-none"
-                    aria-current={active ? "true" : undefined}
-                    title={st.title}
-                  />
-                  <div>
+                <button
+                  key={st.id}
+                  onClick={() => onSelect?.(st.id)}
+                  className="w-full flex items-start gap-4 text-left hover:opacity-80 transition-opacity"
+                >
+                  <span className={`mt-1 h-3 w-3 rounded-full flex-none flex-shrink-0 ${active ? "bg-red-500" : "bg-yellow-400"}`} />
+                  <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <p className={`text-sm font-semibold ${active ? "text-white" : "text-gray-400"}`}>{st.title}</p>
-                      {active && <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded ml-2">IN TRANSIT</span>}
+                      <p className={`text-sm font-semibold uppercase ${active ? "text-yellow-400" : "text-white"}`}>{st.title}</p>
+                      {active && <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded font-semibold">IN TRANSIT</span>}
                     </div>
-                    <p className="text-xs text-gray-500">{st.subtitle}</p>
+                    <p className="text-xs text-gray-400 uppercase mt-1">{st.subtitle}</p>
                   </div>
-                </div>
+                </button>
               );
             })}
           </nav>
