@@ -51,35 +51,40 @@ function StationCard({ station }: { station: Station }) {
   const renderIcon = (id: number) => {
     switch (id) {
       case 1:
+        // Subway 1: use Grid image from public/icons
         return (
-          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" className="text-gray-400">
-            <rect x="3" y="3" width="18" height="18" rx="1" stroke="#6b7280" strokeWidth="1.5" />
-            <g stroke="#6b7280" strokeWidth="1.5">
-              <path d="M7 8h3M7 12h3M7 16h3M14 8h3M14 12h3M14 16h3" />
-            </g>
-          </svg>
+          <img
+            src="/icons/Grid%20(gray).png"
+            alt="Grid icon"
+            className="h-[80%] w-[80%] object-contain"
+          />
         );
       case 2:
+        // Subway 2 keeps the SVG
         return (
-          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" className="text-gray-400">
-            <path d="M8 7v10" stroke="#6b7280" strokeWidth="1.5" />
-            <path d="M16 7v10" stroke="#6b7280" strokeWidth="1.5" />
-            <path d="M8 12h8" stroke="#6b7280" strokeWidth="1.5" />
-          </svg>
+          <img
+            src="/icons/door-open.png"
+            alt="Grid icon"
+            className="h-[80%] w-[80%] object-contain"
+          />
         );
       case 3:
+        // Elevator: use up-down image
         return (
-          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" className="text-gray-400">
-            <path d="M12 6v12" stroke="#6b7280" strokeWidth="1.5" />
-            <path d="M9 9v6" stroke="#6b7280" strokeWidth="1.5" />
-            <path d="M15 9v6" stroke="#6b7280" strokeWidth="1.5" />
-          </svg>
+          <img
+            src="/icons/up-down.png"
+            alt="Elevator icon"
+            className="h-[80%] w-[80%] object-contain"
+          />
         );
       default:
+        // Transit Terminal: use map image
         return (
-          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" className="text-gray-400">
-            <path d="M4 6l7-4 9 4v10l-7 4-9-4z" stroke="#6b7280" strokeWidth="1.5" />
-          </svg>
+          <img
+            src="/icons/map%20(gray).png"
+            alt="Map icon"
+            className="h-[80%] w-[80%] object-contain"
+          />
         );
     }
   };
@@ -91,7 +96,7 @@ function StationCard({ station }: { station: Station }) {
         return (
           <div className="grid grid-cols-2 gap-2 w-full">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="aspect-square bg-gray-800 border border-gray-700 rounded-sm" />
+              <div key={i} className="aspect-square bg-neutral-800 border border-neutral-700 rounded-sm" />
             ))}
           </div>
         );
@@ -100,7 +105,7 @@ function StationCard({ station }: { station: Station }) {
         return (
           <div className="grid grid-cols-3 gap-2 w-full">
             {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className="aspect-square bg-gray-800 border border-gray-700 rounded-sm" />
+              <div key={i} className="aspect-square bg-neutral-800 border border-neutral-700 rounded-sm" />
             ))}
           </div>
         );
@@ -108,7 +113,7 @@ function StationCard({ station }: { station: Station }) {
         return (
           <div className="flex flex-col gap-1 items-center w-full justify-center">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="w-full h-8 sm:h-9 bg-gray-800 border border-gray-700 rounded-sm" />
+              <div key={i} className="w-full h-8 sm:h-9 bg-neutral-800 border border-neutral-700 rounded-sm" />
             ))}
           </div>
         );
@@ -116,7 +121,7 @@ function StationCard({ station }: { station: Station }) {
         return (
           <div className="grid grid-cols-2 gap-2 w-full">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="aspect-square bg-gray-800 border border-gray-700 rounded-sm" />
+              <div key={i} className="aspect-square bg-neutral-800 border border-neutral-700 rounded-sm" />
             ))}
           </div>
         );
@@ -124,12 +129,12 @@ function StationCard({ station }: { station: Station }) {
   };
 
   return (
-    <article className="relative border border-gray-800 p-6 sm:p-8 rounded-md flex flex-col justify-between items-center text-center min-h-[420px] sm:min-h-[480px] md:min-h-[520px] bg-transparent hover:shadow-[0_0_0_6px_rgba(255,255,255,0.01)] transition">
+    <article className="relative border border-gray-800 p-6 sm:p-8 rounded-md flex flex-col justify-between items-center text-center min-h-[420px] sm:min-h-[480px] md:min-h-[520px] bg-transparent transition-transform duration-300 ease-out hover:-translate-y-3 hover:shadow-[0_10px_30px_rgba(255,200,0,0.08)] hover:z-10">
       <div className="absolute top-3 left-3 text-xs border border-gray-800 px-2 rounded bg-[#0b0b0b]">{String(station.id).padStart(2, "0")}</div>
       <div className="absolute top-3 right-3 h-3 w-3 rounded-full bg-yellow-400" aria-hidden />
 
       <div className="pt-4 mb-2 flex flex-col items-center">
-        <div className="h-14 w-14 sm:h-20 sm:w-20 rounded bg-gray-900 flex items-center justify-center mb-4">
+        <div className="h-14 w-14 sm:h-20 sm:w-20 rounded bg-transparent flex items-center justify-center mb-4">
           {renderIcon(station.id)}
         </div>
         <h3 className="text-lg sm:text-2xl text-gray-100 font-extrabold mb-1 uppercase tracking-wide">{station.title}</h3>
@@ -229,8 +234,9 @@ export default function GridLayout() {
         <div className="relative max-w-6xl mx-auto z-10">
           <div className="text-center mb-12">
             <SmallBadge>STATION 01</SmallBadge>
-            <h1 className="text-6xl mt-6 font-extrabold tracking-tight leading-tight">
-              SELECT YOUR <br></br><span className="text-yellow-400">STATION</span>
+            <h1 className="mt-6 tracking-tight">
+              <span className="block text-6xl font-normal leading-none">SELECT YOUR</span>
+              <span className="block text-6xl font-extrabold leading-none text-yellow-400">STATION</span>
             </h1>
             <p className="mt-3 text-gray-400">Choose your photobooth layout and prepare for departure</p>
             <div className="flex items-center justify-center gap-3 mt-4 border-2 border-solid border-gray-400 w-40 p-2 m-auto">

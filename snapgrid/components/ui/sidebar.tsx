@@ -48,7 +48,7 @@ export default function Sidebar({
   classes.push('z-30');
 
   return (
-    <aside id="main-navigation" className={classes.join(' ')}>
+    <aside id="main-navigation" className={classes.join(' ')} style={{ fontFamily: 'TT Firs Neue Trial Var Roman, sans-serif' }}>
       {!isDesktop && (
         <button
           aria-label={isOpen ? "Close navigation" : "Open navigation"}
@@ -66,7 +66,7 @@ export default function Sidebar({
 
       <div className="flex-1 flex flex-col">
         <div className="mb-6">
-          <h2 className="text-2xl font-extrabold text-white tracking-tight">
+          <h2 className="text-5xl font-extrabold tracking-wide text-white tracking-tight" style={{ fontFamily: 'Segment A Key Trial, sans-serif' }}>
             SnapGrid <span className="text-yellow-400">Station</span>
           </h2>
           <p className="text-xs text-gray-400 mt-1">Are you lost in the city too?</p>
@@ -76,7 +76,7 @@ export default function Sidebar({
         <div className="mb-6">
           
           <div className="flex items-center gap-3 mb-6">
-            <div className="rounded-full bg-red-500 text-white font-bold h-10 w-10 flex items-center justify-center text-sm">55</div>
+            <div className="rounded-full bg-red-500 text-white font-bold h-10 w-10 flex items-center justify-center text-sm">SG</div>
             <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">SUBWAY LINE STATUS</p>
           </div>
 
@@ -84,17 +84,16 @@ export default function Sidebar({
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-yellow-400">
               <path d="M2 12h20" stroke="currentColor" strokeWidth="2" />
             </svg>
-            <h4 className="text-xs text-yellow-400 uppercase tracking-wider font-semibold">Your Journey</h4>
+            <h4 className="text-3xl text-yellow-400 uppercase tracking-wide font-semibold" style={{ fontFamily: 'Segment A Key Trial, sans-serif' }}>Your Journey</h4>
           </div>
 
           <nav className="space-y-4">
             {stations.map((st) => {
               const active = st.id === activeStationId;
               return (
-                <button
+                <div
                   key={st.id}
-                  onClick={() => onSelect?.(st.id)}
-                  className="w-full flex items-start gap-4 text-left hover:opacity-80 transition-opacity"
+                  className="w-full flex items-start gap-4 text-left"
                 >
                   <span className={`mt-1 h-3 w-3 rounded-full flex-none flex-shrink-0 ${active ? "bg-red-500" : "bg-yellow-400"}`} />
                   <div className="flex-1">
@@ -104,7 +103,7 @@ export default function Sidebar({
                     </div>
                     <p className="text-xs text-gray-400 uppercase mt-1">{st.subtitle}</p>
                   </div>
-                </button>
+                </div>
               );
             })}
           </nav>
