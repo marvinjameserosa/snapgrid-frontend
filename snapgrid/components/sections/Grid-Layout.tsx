@@ -106,9 +106,9 @@ function StationCard({ station }: { station: Station }) {
         );
       case 3:
         return (
-          <div className="flex flex-col gap-2 items-center w-full justify-center">
+          <div className="flex flex-col gap-1 items-center w-full justify-center">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="w-3/4 h-2 sm:h-3 bg-gray-800 border border-gray-700 rounded-sm" />
+              <div key={i} className="w-full h-8 sm:h-9 bg-gray-800 border border-gray-700 rounded-sm" />
             ))}
           </div>
         );
