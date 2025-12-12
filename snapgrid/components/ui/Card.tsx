@@ -21,7 +21,7 @@ export function Card({ icon, title, description, className }: CardProps) {
         className
       )}
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-sm border border-neutral-700 bg-neutral-950 text-yellow-300 transition group-hover:border-red-500 group-hover:text-red-400">
+      <div className="flex items-center justify-center text-yellow-300 transition group-hover:text-red-400">
         {icon}
       </div>
       <div className="text-xs font-semibold uppercase tracking-[0.3em]">

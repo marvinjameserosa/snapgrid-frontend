@@ -1,72 +1,22 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import Squares from "../ui/bg-particles";
 import { DINEng, TTFirsNeue, segmentA, DSDIGI, segmentAbold } from "@/lib/fonts";
 
-function CameraIcon() {
+function FeatureIcon({ src, alt }: { src: string; alt: string }) {
   return (
-    <svg
-      aria-hidden
-      className="h-5 w-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      viewBox="0 0 24 24"
-    >
-      <path
-        d="M7 7.5h-.5A2.5 2.5 0 0 0 4 10v7a2.5 2.5 0 0 0 2.5 2.5h11A2.5 2.5 0 0 0 20 17v-7a2.5 2.5 0 0 0-2.5-2.5H17"
-      />
-      <path d="M9 7.5 10.5 5h3L15 7.5" />
-      <circle cx="12" cy="13.5" r="3" />
-    </svg>
-  );
-}
-
-function GridIcon() {
-  return (
-    <svg
-      aria-hidden
-      className="h-5 w-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      viewBox="0 0 24 24"
-    >
-      <rect height="6" width="6" x="4" y="4" />
-      <rect height="6" width="6" x="14" y="4" />
-      <rect height="6" width="6" x="4" y="14" />
-      <rect height="6" width="6" x="14" y="14" />
-    </svg>
-  );
-}
-
-function BoltIcon() {
-  return (
-    <svg
-      aria-hidden
-      className="h-5 w-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      viewBox="0 0 24 24"
-    >
-      <path d="M11 3 5 13h6l-2 8 8-12h-6z" />
-    </svg>
-  );
-}
-
-function MapIcon() {
-  return (
-    <svg
-      aria-hidden
-      className="h-5 w-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      viewBox="0 0 24 24"
-    >
-      <path d="m9 4-5 2v14l5-2 6 2 5-2V4l-5 2z" />
-      <circle cx="18" cy="8" r="1" />
-    </svg>
+    <Image
+      src={src}
+      alt={alt}
+      width={32}
+      height={32}
+      className="h-8 w-8"
+      priority
+    />
   );
 }
 
@@ -89,13 +39,34 @@ function BusIcon() {
 }
 
 const featureCards = [
-  { title: "Capture", icon: <CameraIcon /> },
-  { title: "Arrange", icon: <GridIcon /> },
-  { title: "Enhance", icon: <BoltIcon /> },
-  { title: "Share", icon: <MapIcon /> },
+  { title: "Capture", icon: <FeatureIcon src="/icons/camera%20(yellow).png" alt="Camera" /> },
+  { title: "Arrange", icon: <FeatureIcon src="/icons/grid%20(yellow).png" alt="Grid" /> },
+  { title: "Enhance", icon: <FeatureIcon src="/icons/flash.png" alt="Flash" /> },
+  { title: "Share", icon: <FeatureIcon src="/icons/map%20(yellow).png" alt="Map" /> },
 ];
 
+function formatStatusTimestamp(date: Date): string {
+  const pad = (value: number) => value.toString().padStart(2, "0");
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1);
+  const day = pad(date.getDate());
+
+  return `${year}-${month}-${day}`;
+}
+
 export default function Hero() {
+  const [systemTimestamp, setSystemTimestamp] = useState<string>(() =>
+    formatStatusTimestamp(new Date())
+  );
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setSystemTimestamp(formatStatusTimestamp(new Date()));
+    }, 60_000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   return (
     <section className="relative isolate h-screen overflow-hidden bg-black text-white">
       <div
@@ -107,10 +78,20 @@ export default function Hero() {
         className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,0,0,0.08)_0%,_rgba(0,0,0,0)_55%)]"
       />
 
+      <div className="pointer-events-none absolute inset-0 opacity-30">
+        <Squares
+          direction="diagonal"
+          speed={0.4}
+          borderColor="rgba(255,255,255,0.07)"
+          hoverFillColor="rgba(255,0,0,0.12)"
+          squareSize={56}
+        />
+      </div>
+
       <div className="pointer-events-none absolute left-6 top-6 h-14 w-14 border-l-2 border-t-2 border-yellow-400/80" />
       <div className="pointer-events-none absolute right-6 top-6 h-14 w-14 border-r-2 border-t-2 border-yellow-400/80" />
-      <div className="pointer-events-none absolute bottom-6 left-6 h-14 w-14 border-b-2 border-l-2 border-yellow-400/80" />
-      <div className="pointer-events-none absolute bottom-6 right-6 h-14 w-14 border-b-2 border-r-2 border-yellow-400/80" />
+      <div className="pointer-events-none absolute bottom-12 left-6 h-14 w-14 border-b-2 border-l-2 border-yellow-400/80" />
+      <div className="pointer-events-none absolute bottom-12 right-6 h-14 w-14 border-b-2 border-r-2 border-yellow-400/80" />
 
       <div className="pointer-events-none absolute inset-x-12 top-1/2 h-px bg-white/5" />
       <div className="pointer-events-none absolute inset-y-12 left-1/2 w-px bg-white/5" />
@@ -127,7 +108,7 @@ export default function Hero() {
               System Online
             </span>
             <span className="h-3 w-px bg-neutral-700" />
-            <span className="text-neutral-500">2025-11-18</span>
+            <span className="text-neutral-500">{systemTimestamp}</span>
           </div>
 
           <div className={`${DSDIGI.className} flex items-center gap-6 border-red-500 bg-red-600/95 px-4 py-2 text-xl uppercase tracking-[100rem]]`}>
@@ -164,30 +145,33 @@ export default function Hero() {
             ))}
           </div>
 
-          <div className={`${DSDIGI.className} flex flex-col items-center gap-5 text-center`}>
+          <div className={`${DSDIGI.className} flex flex-col items-center gap-3 text-center`}>
             <div className="relative">
               <span className="pointer-events-none absolute inset-x-4 -bottom-6 h-12 -translate-y-1/2 rounded-full bg-red-500/45 blur-2xl" />
               <Button
                 size="lg"
-                className="relative z-10 border border-red-400/70 bg-red-600 px-12 py-3 text-white shadow-[0_0_40px_rgba(255,0,0,0.35)] hover:bg-red-500"
+                className="relative z-10 border border-red-400/70 bg-red-600 px-12 py-3 text-white shadow-[0_0_40px_rgba(255,0,0,0.35)] hover:bg-red-500 !font-light tracking-[0.2em]"
               >
                 {"-> ENTER STATION ->"}
               </Button>
             </div>
+            <p className={`${DINEng.className} text-[0.65rem] uppercase tracking-[0.35em] text-neutral-500`}>
+              Press to begin your photo journey
+            </p>
           </div>
         </div>
 
-        <p className={`${DINEng.className} pb-4 text-xs uppercase tracking-[0.35em] text-neutral-500`}>
-          Press to begin your photo journey
-        </p>
-
-        <div className="flex w-full max-w-2xl items-center justify-between rounded-sm border border-neutral-800 bg-neutral-900/70 px-5 py-3 text-[0.65rem] uppercase tracking-[0.28em] text-neutral-400">
-          <span className="flex items-center gap-2 text-red-400">
-            <span className="h-2 w-2 rounded-full bg-red-500" />
-            Platform Ready
-          </span>
-          <span className="h-px flex-1 bg-neutral-800" />
-          <span>4 Layouts + Unlimited Memories</span>
+        
+        <div className="relative w-full max-w-2xl self-center">
+          <div className="relative z-10 flex w-full items-center justify-between gap-4 rounded-sm border border-neutral-800 bg-neutral-900/70 px-5 py-3 text-[0.65rem] uppercase tracking-[0.28em] text-neutral-400">
+            <span className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 border border-red-600 bg-red-500 shadow-[0_0_12px_rgba(255,0,0,0.5)]" />
+              Platform Ready
+            </span>
+            <span aria-hidden className="h-4 w-px bg-neutral-700" />
+            <span>4 Layouts + Unlimited Memories</span>
+          </div>
+          <div className="absolute left-1/2 top-full h-3 w-[calc(100vw-3rem)] max-w-none -translate-x-1/2 bg-yellow-300/40 shadow-[0_0_40px_rgba(255,255,0,0.25)]" />
         </div>
       </div>
 
