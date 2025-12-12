@@ -74,7 +74,7 @@ function BusIcon() {
   return (
     <svg
       aria-hidden
-      className="h-4 w-4"
+      className="h-7 w-7"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
@@ -112,42 +112,49 @@ export default function Hero() {
       <div className="pointer-events-none absolute bottom-6 left-6 h-14 w-14 border-b-2 border-l-2 border-yellow-400/80" />
       <div className="pointer-events-none absolute bottom-6 right-6 h-14 w-14 border-b-2 border-r-2 border-yellow-400/80" />
 
+      <div className="pointer-events-none absolute inset-x-12 top-1/2 h-px bg-white/5" />
+      <div className="pointer-events-none absolute inset-y-12 left-1/2 w-px bg-white/5" />
+      <div className="pointer-events-none absolute left-12 top-1/3 h-16 w-px bg-yellow-400/70" />
+      <div className="pointer-events-none absolute right-12 bottom-1/4 h-16 w-px bg-yellow-400/70" />
+      <div className="pointer-events-none absolute left-16 bottom-1/3 h-1 w-8 bg-red-500/80" />
+      <div className="pointer-events-none absolute right-16 top-1/3 h-1 w-8 bg-red-500/80" />
+
       <div className="relative mx-auto flex h-full w-full max-w-5xl flex-col items-center justify-between box-border px-6 py-10">
         <div className="flex flex-col items-center gap-8 text-center">
           <div className="flex items-center gap-4 rounded-sm border border-neutral-800 bg-neutral-900/70 px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-neutral-300">
-            <span className="flex items-center gap-2 text-green-400">
-              <span className="h-2 w-2 rounded-full bg-green-400" />
+            <span className="flex items-center gap-2 text-green-500">
+              <span className="h-2 w-2 rounded-full bg-green-500" />
               System Online
             </span>
             <span className="h-3 w-px bg-neutral-700" />
             <span className="text-neutral-500">2025-11-18</span>
           </div>
 
-          <div className="flex items-center gap-2 rounded-sm border border-red-500 bg-red-600 px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-black">
-            <span className="flex items-center gap-2">
+          <div className={`${DSDIGI.className} flex items-center gap-6 border-red-500 bg-red-600/95 px-4 py-2 text-xl uppercase tracking-[100rem]]`}>
+            <span className="flex items-center">
               <BusIcon />
-              Transit
             </span>
-            <span className="h-3 w-px bg-black/30" />
-            <span>5G</span>
+            <span className="flex items-center gap-">
+              <span>5 G</span>
+            </span>
           </div>
 
           <div className={`${segmentAbold.className} space-y-2`}>
-            <h1 className="text-6xl font-extrabold tracking-[0.08em] sm:text-8xl md:text-9xl">
-              <span className="block text-white">SnapGrid</span>
-              <span className="block text-yellow-400">Station</span>
+            <h1 className="text-15xl font-extrabold leading-[0.8] tracking-[0.01em] sm:text-8xl md:text-9xl">
+              <span className="block tracking-normal text-white">SnapGrid</span>
+              <span className="block tracking-normal text-yellow-400">Station</span>
             </h1>
           </div>
         </div>
 
         <div className={`${TTFirsNeue.className} relative mx-auto mt-8 w-full max-w-md`}>
-            <div className="absolute -left-3 -top-3 h-4 w-4 border-l-2 border-t-2 border-red-500" />
-            <div className="absolute -right-3 -top-3 h-4 w-4 border-r-2 border-t-2 border-red-500" />
-            <div className="absolute -left-3 -bottom-3 h-4 w-4 border-b-2 border-l-2 border-red-500" />
-            <div className="absolute -right-3 -bottom-3 h-4 w-4 border-b-2 border-r-2 border-red-500" />
-            <div className="text-center rounded-sm border border-neutral-800 bg-neutral-900/70 px-8 py-4 text-base tracking-[0.28em] text-gray-400">
-            Are you lost in the city too?
-            </div>
+          <span className="pointer-events-none absolute left-108 top-12.5 right-0 h-2.5 w-2.5 translate-x-1/2 translate-y-1/2 bg-red-600" />
+          <span className="pointer-events-none absolute right-0 top-12.5 left-1.5 h-2.5 w-2.5 -translate-x-1/2 translate-y-1/2 bg-red-600" />
+          <span className="pointer-events-none absolute bottom-12.5 left-108 right-20 h-2.5 w-2.5 translate-x-1/2 -translate-y-1/2 bg-red-600" />
+          <span className="pointer-events-none absolute bottom-12.5 right-108 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 bg-red-600" />
+          <div className="border border-neutral-700 bg-neutral-900/75 px-10 py-5 text-center text-base tracking-[0.28em] text-neutral-400 shadow-[0_0_25px_rgba(255,0,0,0.08)]">
+            <span className="whitespace-nowrap">Are you lost in the city too?</span>
+          </div>
         </div>
 
         <div className="flex w-full flex-1 flex-col items-center justify-center gap-12">
@@ -158,15 +165,21 @@ export default function Hero() {
           </div>
 
           <div className={`${DSDIGI.className} flex flex-col items-center gap-5 text-center`}>
-            <Button size="lg" className="px-10">
-              {"-> Enter Station ->"}
-            </Button>
+            <div className="relative">
+              <span className="pointer-events-none absolute inset-x-4 -bottom-6 h-12 -translate-y-1/2 rounded-full bg-red-500/45 blur-2xl" />
+              <Button
+                size="lg"
+                className="relative z-10 border border-red-400/70 bg-red-600 px-12 py-3 text-white shadow-[0_0_40px_rgba(255,0,0,0.35)] hover:bg-red-500"
+              >
+                {"-> ENTER STATION ->"}
+              </Button>
+            </div>
           </div>
         </div>
 
-        <p className={`${DINEng.className} text-xs uppercase tracking-[0.35em] text-neutral-500 pb-15`}>
-              Press to begin your photo journey
-            </p>
+        <p className={`${DINEng.className} pb-4 text-xs uppercase tracking-[0.35em] text-neutral-500`}>
+          Press to begin your photo journey
+        </p>
 
         <div className="flex w-full max-w-2xl items-center justify-between rounded-sm border border-neutral-800 bg-neutral-900/70 px-5 py-3 text-[0.65rem] uppercase tracking-[0.28em] text-neutral-400">
           <span className="flex items-center gap-2 text-red-400">
