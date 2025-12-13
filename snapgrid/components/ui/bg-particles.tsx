@@ -14,7 +14,6 @@ interface SquaresProps {
   borderColor?: CanvasStrokeStyle;
   squareSize?: number;
   hoverFillColor?: CanvasStrokeStyle;
-  className?: string;
 }
 
 const Squares: React.FC<SquaresProps> = ({
@@ -22,8 +21,7 @@ const Squares: React.FC<SquaresProps> = ({
   speed = 1,
   borderColor = '#999',
   squareSize = 40,
-  hoverFillColor = '#222',
-  className,
+  hoverFillColor = '#222'
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | null>(null);
@@ -152,7 +150,7 @@ const Squares: React.FC<SquaresProps> = ({
     };
   }, [direction, speed, borderColor, hoverFillColor, squareSize]);
 
-  return <canvas ref={canvasRef} className={`w-full h-full border-none block ${className ?? ''}`.trim()}></canvas>;
+  return <canvas ref={canvasRef} className="w-full h-full border-none block"></canvas>;
 };
 
 export default Squares;
