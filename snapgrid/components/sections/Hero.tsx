@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import Squares from "../ui/bg-particles";
 import { DINEng, TTFirsNeue, segmentA, DSDIGI, segmentAbold } from "@/lib/fonts";
+import Link from "next/link";
+
 
 function FeatureIcon({ src, alt }: { src: string; alt: string }) {
   return (
@@ -148,12 +150,14 @@ export default function Hero() {
           <div className={`${DSDIGI.className} flex flex-col items-center gap-3 text-center`}>
             <div className="relative">
               <span className="pointer-events-none absolute inset-x-4 -bottom-6 h-12 -translate-y-1/2 rounded-full bg-red-500/45 blur-2xl" />
-              <Button
-                size="lg"
-                className="relative z-10 border border-red-400/70 bg-red-600 px-12 py-3 text-white shadow-[0_0_40px_rgba(255,0,0,0.35)] hover:bg-red-500 !font-light tracking-[0.2em]"
-              >
-                {"-> ENTER STATION ->"}
-              </Button>
+              <Link href={"/grid-layout-selection"}>
+                <Button
+                  size="lg"
+                  className="relative z-10 border border-red-400/70 bg-red-600 px-12 py-3 text-white shadow-[0_0_40px_rgba(255,0,0,0.35)] hover:bg-red-500 !font-light tracking-[0.2em]"
+                >
+                  {"-> ENTER STATION ->"}
+                </Button>
+              </Link>
             </div>
             <p className={`${DINEng.className} text-[0.65rem] uppercase tracking-[0.35em] text-neutral-500`}>
               Press to begin your photo journey
