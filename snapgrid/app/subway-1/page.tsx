@@ -1,10 +1,9 @@
-import Image from "next/image";
-import subwayOne from "@/components/sections/subway-1";
+import SubwayOne from "@/components/sections/subway-1";
 
 export default function Home() {
   return (
     <>
-    <subwayOne />
+      <SubwayOne />
     </>
   );
 }
