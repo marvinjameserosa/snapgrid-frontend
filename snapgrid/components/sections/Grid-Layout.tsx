@@ -119,9 +119,9 @@ function StationCard({ station }: { station: Station }) {
         );
       default:
         return (
-          <div className="grid grid-cols-2 gap-2 w-full">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="aspect-square bg-neutral-800 border border-neutral-700 rounded-sm" />
+          <div className="grid grid-cols-2 gap-1 w-full mb-10">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className=" w-full h-12 sm:h-12  bg-neutral-800 border border-neutral-700 rounded-sm" />
             ))}
           </div>
         );
