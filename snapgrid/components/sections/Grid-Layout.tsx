@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Squares from '@/components/ui/bg-particles';
 import Sidebar from '@/components/ui/sidebar';
-  
+import Link from "next/link";
+
 type Station = {
   id: number;
   title: string;
@@ -148,7 +149,9 @@ function StationCard({ station }: { station: Station }) {
       </div>
 
       <div className="w-full mt-6">
-        <Button>— BOARD THIS TRAIN</Button>
+        <Link href={station.id === 1 ? '/subway-1' : station.id === 2 ? '/subway-2' : station.id === 3 ? '/elevator' : '/transit-terminal'}>
+  <Button>— BOARD THIS TRAIN</Button>
+</Link>
       </div>
     </article>
   );
