@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { DINEng } from '@/lib/fonts';
+import PhotoGrid from './PhotoGrid';
 
 
 /* Preview area with optional selected image. */
@@ -27,31 +28,31 @@ export function ControlsBar() {
   return (
     <div className={`${DINEng.className} mt-4`}>
       <div className="flex gap-4">
-        <button className="flex-1 border border-[#2a2a2a] bg-transparent text-gray-200 py-3 px-4 rounded flex items-center justify-center gap-3">
+        <button className="flex-1 border border-[#2a2a2a] bg-transparent text-gray-200 py-3 px-4 rounded flex items-center justify-center gap-3 cursor-pointer">
           <img src="/icons/camera (white).png" alt="camera" className="h-4 w-4" />
           <span className="uppercase text-lg font-extralight">Camera</span>
         </button>
-        <button className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded flex items-center justify-center gap-3">
+        <button className="cursor-pointer flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded flex items-center justify-center gap-3">
           <img src="/icons/uploading (white).png" alt="upload" className="h-4 w-4" />
           <span className="uppercase text-lg">Upload</span>
         </button>
       </div>
 
-      <button className="mt-4 w-full h-15 bg-yellow-400 hover:bg-yellow-500 text-black py-3 rounded uppercase  flex items-center justify-center gap-3">
+      <button className="cursor-pointer mt-4 w-full h-15 bg-yellow-400 hover:bg-yellow-500 text-black py-3 rounded uppercase  flex items-center justify-center gap-3">
         <img src="/icons/uploading (black).png" alt="upload photos" className="h-4 w-4" />
         <span className="text-lg">Upload Photos</span>
       </button>
 
       <div className="mt-4 flex gap-3">
-        <button className="flex-1 bg-sky-500 text-white py-2 px-3 rounded text-s flex items-center justify-center gap-2">
+        <button className="cursor-pointer flex-1 bg-sky-500 text-white py-2 px-3 rounded text-s flex items-center justify-center gap-2">
           <img src="/icons/STICKERS.png" alt="stickers" className="h-4 w-4" />
           <span className="uppercase text-lg">Stickers</span>
         </button>
-        <button className="flex-1 bg-cyan-500 text-white py-2 px-3 rounded text-s flex items-center justify-center gap-2">
+        <button className="cursor-pointer flex-1 bg-cyan-500 text-white py-2 px-3 rounded text-s flex items-center justify-center gap-2">
           <img src="/icons/FILTERS.png" alt="filters" className="h-4 w-4" />
           <span className="uppercase text-lg">Filters</span>
         </button>
-        <button className="flex-1 border border-[#2a2a2a] text-gray-200 py-2 px-3 rounded text-s flex items-center justify-center gap-2">
+        <button className="cursor-pointer flex-1 border border-[#2a2a2a] text-gray-200 py-2 px-3 rounded text-s flex items-center justify-center gap-2">
           <img src="/icons/RESET.png" alt="reset" className="h-4 w-4" />
           <span className="uppercase text-lg">Reset</span>
         </button>
@@ -80,48 +81,8 @@ export function FilterStrip() {
   );
 }
 
-/* Right-hand 2x2 photo grid with Complete Session button */
-export function PhotoGrid({ onSelect }: { onSelect?: (src: string) => void }) {
-  const grid = new Array(4).fill(0).map((_, i) => ({ id: i + 1, src: `/images/placeholder-${(i % 4) + 1}.jpg` }));
 
-  return (
-    <aside className={`${DINEng.className} w-full md:w-96 bg-[#0b0b0b] border border-[#222] rounded-md p-4 flex flex-col gap-4`}>
-      <div className="flex justify-between items-center">
-        <h2 className="text-yellow-400 font-bold tracking-wider">PHOTO GRID</h2>
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-yellow-400" />
-          <div className="text-sm text-gray-400">0/4</div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        {grid.map((g) => (
-          <button
-            key={g.id}
-            onClick={() => onSelect?.(g.src)}
-            className="aspect-square bg-[#171717] rounded overflow-hidden border border-[#1b1b1b] relative flex items-center justify-center"
-          >
-            <div className="text-center text-gray-400 text-s flex flex-col items-center">
-              <img src="/icons/SLOT ICON.png" alt="" className="h-8 w-8"/>
-              <div className="font-light text-lg">SLOT {g.id}</div>
-              <div className="text-base mt-1">EMPTY</div>
-            </div>
-            <div className="absolute top-2 right-2 bg-green-400 text-black text-s px-2 py-1 rounded">#{g.id}</div>
-          </button>
-        ))}
-      </div>
-
-      {/* <div className="mt-auto">
-        <button className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded flex items-center justify-center gap-3">
-          <img src="/icons/placeholder.png" alt="complete" className="h-8 w-8" />
-          <span className="uppercase font-light">Complete Session</span>
-        </button>
-      </div> */}
-    </aside>
-  );
-}
-
-export default function PhotoCaptureLayout() {
+export default function PhotoCaptureLayout({ gridItems, gridSize, gridTitle }: { gridItems?: Array<string | { id?: number; src?: string }>, gridSize?: number, gridTitle?: string }) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
 
   return (
@@ -133,7 +94,13 @@ export default function PhotoCaptureLayout() {
       </div>
 
       <div className="md:col-span-1">
-        <PhotoGrid onSelect={(src) => setSelected(src)} />
+        <PhotoGrid 
+                items={gridItems} 
+                size={4}          // total size
+                columns={2}       // n of columns
+                title="PHOTO GRID" 
+                onSelect={(src) => setSelected(src)} 
+              />
       </div>
     </div>
   );

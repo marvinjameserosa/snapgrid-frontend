@@ -142,7 +142,7 @@ export default function SubwayOne() {
             </div>
 
             {/* Photo capture layout component*/}
-            <PhotoCaptureLayout />
+            <PhotoCaptureLayout gridSize={activeStationId === 3 ? 4 : activeStationId === 3 ? 2 : 5} />
 
           </div>
         </main>
