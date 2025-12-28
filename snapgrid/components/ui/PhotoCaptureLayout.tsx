@@ -24,7 +24,7 @@ export function PreviewPanel({ selected }: { selected?: string }) {
 }
 
 /* Primary action buttons and the yellow 'UPLOAD PHOTOS' CTA */
-export function ControlsBar() {
+export function ControlsBar({ onToggleFilters, filtersOpen }: { onToggleFilters?: () => void; filtersOpen?: boolean }) {
   return (
     <div className={`${DINEng.className} mt-4`}>
       <div className="flex gap-4">
@@ -48,7 +48,7 @@ export function ControlsBar() {
           <img src="/icons/STICKERS.png" alt="stickers" className="h-4 w-4" />
           <span className="uppercase text-lg">Stickers</span>
         </button>
-        <button className="cursor-pointer flex-1 bg-cyan-500 text-white py-2 px-3 rounded text-s flex items-center justify-center gap-2">
+        <button onClick={onToggleFilters} className={`cursor-pointer flex-1 py-2 px-3 rounded text-s flex items-center justify-center gap-2 ${filtersOpen ? 'bg-cyan-700 text-white' : 'bg-cyan-500 text-white'}`}>
           <img src="/icons/FILTERS.png" alt="filters" className="h-4 w-4" />
           <span className="uppercase text-lg">Filters</span>
         </button>
@@ -58,9 +58,11 @@ export function ControlsBar() {
         </button>
       </div>
 
-      <div className="mt-4 border-t border-[#1e1e1e] pt-3">
-        <div className="text-center text-lg uppercase text-cyan-300 py-3 border border-solid border-[#092433] rounded">Select a photo below to add filters</div>
-      </div>
+      {filtersOpen && (
+        <div className="mt-4 border-t border-[#1e1e1e] pt-3">
+          <div className="text-center text-lg uppercase text-cyan-300 py-3 border border-solid border-[#092433] rounded">Select a photo below to add filters</div>
+        </div>
+      )}
     </div>
   );
 }
@@ -84,13 +86,14 @@ export function FilterStrip() {
 
 export default function PhotoCaptureLayout({ gridItems, gridSize, gridTitle }: { gridItems?: Array<string | { id?: number; src?: string }>, gridSize?: number, gridTitle?: string }) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
     <div className={`${DINEng.className} grid grid-cols-1 md:grid-cols-3 gap-6`}>
       <div className="md:col-span-2">
         <PreviewPanel selected={selected} />
-        <ControlsBar />
-        <FilterStrip />
+        <ControlsBar onToggleFilters={() => setFiltersOpen((v) => !v)} filtersOpen={filtersOpen} />
+        {filtersOpen && <FilterStrip />}
       </div>
 
       <div className="md:col-span-1">
