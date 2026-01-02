@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { useSearchParams } from 'next/navigation';
 import { DINEng } from '@/lib/fonts';
 import PhotoGrid from './PhotoGrid';
 import StickerPanel from './StickerPanel';
 
+/* -------------------------------------------------------------------------- */
+/* SUB-COMPONENTS (RESTORED)                        */
+/* -------------------------------------------------------------------------- */
 
 /* Preview area with optional selected image. */
 export function PreviewPanel({ selected }: { selected?: string }) {
@@ -86,24 +88,22 @@ export function FilterStrip() {
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/* MAIN COMPONENT                                 */
+/* -------------------------------------------------------------------------- */
 
-export default function PhotoCaptureLayout({ gridItems, gridSize, gridColumns, gridTitle }: { gridItems?: Array<string | { id?: number; src?: string }>, gridSize?: number, gridColumns?: number, gridTitle?: string }) {
-  const searchParams = useSearchParams();
-  const stationParam = searchParams?.get('station');
-  const stationId = stationParam ? Number(stationParam) : undefined;
+interface LayoutConfig {
+  size: number;
+  columns: number;
+  title: string;
+}
 
-  // derive settings from station param if available
-  const mapping: { [key: number]: { size: number; columns: number; title?: string } } = {
-    1: { size: 4, columns: 2, title: 'SUBWAY 1' },
-    2: { size: 9, columns: 3, title: 'SUBWAY 2' },
-    3: { size: 4, columns: 1, title: 'ELEVATOR' },
-    4: { size: 6, columns: 2, title: 'TRANSIT TERMINAL' },
-  };
+interface PhotoCaptureLayoutProps {
+  gridItems?: Array<string | { id?: number; src?: string }>;
+  config: LayoutConfig; 
+}
 
-  const derived = stationId && mapping[stationId] ? mapping[stationId] : undefined;
-  const size = gridSize ?? derived?.size ?? 4;
-  const columns = gridColumns ?? derived?.columns ?? 2;
-  const title = gridTitle ?? derived?.title ?? 'PHOTO GRID';
+export default function PhotoCaptureLayout({ gridItems, config }: PhotoCaptureLayoutProps) {
 
   const [selected, setSelected] = useState<string | undefined>(undefined);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -113,6 +113,7 @@ export default function PhotoCaptureLayout({ gridItems, gridSize, gridColumns, g
     <div className={`${DINEng.className} grid grid-cols-1 md:grid-cols-3 gap-6`}>
       <div className="md:col-span-2">
         <PreviewPanel selected={selected} />
+        {/* Pass props down to controls as needed */}
         <ControlsBar
           onToggleFilters={() => setFiltersOpen((v) => !v)}
           filtersOpen={filtersOpen}
@@ -129,18 +130,15 @@ export default function PhotoCaptureLayout({ gridItems, gridSize, gridColumns, g
       </div>
       
       <div className="md:col-span-1">
-      
+        {/* NOW WE USE THE CONFIG PROP DIRECTLY */}
         <PhotoGrid 
-        // DITO I EEDIT YUNG PROPS
-                items={gridItems} 
-                size={4}          // total size
-                columns={2}       // n of columns
-                title="PHOTO GRID" 
-                onSelect={(src) => setSelected(src)} 
-              />
+          items={gridItems} 
+          size={config.size}       
+          columns={config.columns}     
+          title={config.title} 
+          onSelect={(src) => setSelected(src)} 
+        />
       </div>
-
-
     </div>
   );
 }
