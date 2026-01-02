@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import { useSearchParams } from 'next/navigation';
 import { DINEng } from '@/lib/fonts';
 import PhotoGrid from './PhotoGrid';
+import StickerPanel from './StickerPanel';
 
 
 /* Preview area with optional selected image. */
@@ -24,7 +26,7 @@ export function PreviewPanel({ selected }: { selected?: string }) {
 }
 
 /* Primary action buttons and the yellow 'UPLOAD PHOTOS' CTA */
-export function ControlsBar({ onToggleFilters, filtersOpen }: { onToggleFilters?: () => void; filtersOpen?: boolean }) {
+export function ControlsBar({ onToggleFilters, filtersOpen, onToggleStickers, stickersOpen }: { onToggleFilters?: () => void; filtersOpen?: boolean; onToggleStickers?: () => void; stickersOpen?: boolean }) {
   return (
     <div className={`${DINEng.className} mt-4`}>
       <div className="flex gap-4">
@@ -44,7 +46,7 @@ export function ControlsBar({ onToggleFilters, filtersOpen }: { onToggleFilters?
       </button>
 
       <div className="mt-4 flex gap-3">
-        <button className="cursor-pointer flex-1 bg-sky-500 text-white py-2 px-3 rounded text-s flex items-center justify-center gap-2">
+        <button onClick={onToggleStickers} className={`cursor-pointer flex-1 py-2 px-3 rounded text-s flex items-center justify-center gap-2 ${stickersOpen ? 'bg-amber-400 text-black' : 'bg-sky-500 text-white'}`}>
           <img src="/icons/STICKERS.png" alt="stickers" className="h-4 w-4" />
           <span className="uppercase text-lg">Stickers</span>
         </button>
@@ -63,6 +65,7 @@ export function ControlsBar({ onToggleFilters, filtersOpen }: { onToggleFilters?
           <div className="text-center text-lg uppercase text-cyan-300 py-3 border border-solid border-[#092433] rounded">Select a photo below to add filters</div>
         </div>
       )}
+
     </div>
   );
 }
@@ -84,20 +87,51 @@ export function FilterStrip() {
 }
 
 
-export default function PhotoCaptureLayout({ gridItems, gridSize, gridTitle }: { gridItems?: Array<string | { id?: number; src?: string }>, gridSize?: number, gridTitle?: string }) {
+export default function PhotoCaptureLayout({ gridItems, gridSize, gridColumns, gridTitle }: { gridItems?: Array<string | { id?: number; src?: string }>, gridSize?: number, gridColumns?: number, gridTitle?: string }) {
+  const searchParams = useSearchParams();
+  const stationParam = searchParams?.get('station');
+  const stationId = stationParam ? Number(stationParam) : undefined;
+
+  // derive settings from station param if available
+  const mapping: { [key: number]: { size: number; columns: number; title?: string } } = {
+    1: { size: 4, columns: 2, title: 'SUBWAY 1' },
+    2: { size: 9, columns: 3, title: 'SUBWAY 2' },
+    3: { size: 4, columns: 1, title: 'ELEVATOR' },
+    4: { size: 6, columns: 2, title: 'TRANSIT TERMINAL' },
+  };
+
+  const derived = stationId && mapping[stationId] ? mapping[stationId] : undefined;
+  const size = gridSize ?? derived?.size ?? 4;
+  const columns = gridColumns ?? derived?.columns ?? 2;
+  const title = gridTitle ?? derived?.title ?? 'PHOTO GRID';
+
   const [selected, setSelected] = useState<string | undefined>(undefined);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [stickersOpen, setStickersOpen] = useState(false);
 
   return (
     <div className={`${DINEng.className} grid grid-cols-1 md:grid-cols-3 gap-6`}>
       <div className="md:col-span-2">
         <PreviewPanel selected={selected} />
-        <ControlsBar onToggleFilters={() => setFiltersOpen((v) => !v)} filtersOpen={filtersOpen} />
+        <ControlsBar
+          onToggleFilters={() => setFiltersOpen((v) => !v)}
+          filtersOpen={filtersOpen}
+          onToggleStickers={() => setStickersOpen((v) => !v)}
+          stickersOpen={stickersOpen}
+        />
         {filtersOpen && <FilterStrip />}
+        {stickersOpen && (
+          <StickerPanel
+            open={stickersOpen}
+            onClose={() => setStickersOpen(false)}
+          />
+        )}
       </div>
-
+      
       <div className="md:col-span-1">
+      
         <PhotoGrid 
+        // DITO I EEDIT YUNG PROPS
                 items={gridItems} 
                 size={4}          // total size
                 columns={2}       // n of columns
@@ -105,6 +139,8 @@ export default function PhotoCaptureLayout({ gridItems, gridSize, gridTitle }: {
                 onSelect={(src) => setSelected(src)} 
               />
       </div>
+
+
     </div>
   );
 }

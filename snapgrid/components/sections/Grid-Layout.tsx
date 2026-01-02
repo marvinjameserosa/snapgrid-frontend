@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Squares from '@/components/ui/bg-particles';
 import Sidebar from '@/components/ui/sidebar';
-import Link from "next/link";
+import { useRouter } from 'next/navigation';
+
 
 type Station = {
   id: number;
@@ -48,7 +49,7 @@ function Button({ children, onClick }: { children: React.ReactNode; onClick?: ()
 }
 
 // Station card
-function StationCard({ station }: { station: Station }) {
+function StationCard({ station, onSelect }: { station: Station; onSelect?: (id: number) => void }) {
   const renderIcon = (id: number) => {
     switch (id) {
       case 1:
@@ -149,18 +150,24 @@ function StationCard({ station }: { station: Station }) {
       </div>
 
       <div className="w-full mt-6">
-        <Link href={station.id === 1 ? '/subway-1' : station.id === 2 ? '/subway-2' : station.id === 3 ? '/elevator' : '/transit-terminal'}>
-  <Button>— BOARD THIS TRAIN</Button>
-</Link>
+        <Button onClick={() => onSelect?.(station.id)}>— BOARD THIS TRAIN</Button>
       </div>
     </article>
   );
 }
 
 export default function GridLayout() {
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeStationId, setActiveStationId] = useState<number>(1);
   const [isDesktop, setIsDesktop] = useState<boolean>(true);
+
+  // Single-page layout selection state
+  const [selectedLayout, setSelectedLayout] = useState<'select' | 'subway_1' | 'subway_2' | 'elevator' | 'transit_terminal'>('select');
+
+  // Photos state is kept at the parent so it survives layout switches
+  const [photos, setPhotos] = useState<string[]>([]);
+
 
   useEffect(() => {
     // Lock body scroll when sidebar is open on small screens (only on mobile)
@@ -251,7 +258,17 @@ export default function GridLayout() {
 
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {stations.map((s) => (
-              <StationCard key={s.id} station={s} />
+              <StationCard key={s.id} station={s} onSelect={(id)=>{
+                // set selected layout for internal state (optional)
+                switch(id){
+                  case 1: setSelectedLayout('subway_1'); break;
+                  case 2: setSelectedLayout('subway_2'); break;
+                  case 3: setSelectedLayout('elevator'); break;
+                  default: setSelectedLayout('transit_terminal'); break;
+                }
+                // navigate to capture-photos with station id as query param
+                router.push(`/capture-photos?station=${id}`);
+              }} />
             ))}
           </section>
         </div>

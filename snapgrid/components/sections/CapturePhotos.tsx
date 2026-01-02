@@ -47,7 +47,7 @@ function Button({ children, onClick }: { children: React.ReactNode; onClick?: ()
   );
 }
 
-export default function SubwayOne() {
+export default function CapturePhotos() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [activeStationId, setActiveStationId] = useState<number>(2);
     const [isDesktop, setIsDesktop] = useState<boolean>(true);
