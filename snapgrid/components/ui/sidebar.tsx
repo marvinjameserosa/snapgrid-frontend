@@ -11,6 +11,7 @@ export type StationItem = {
 export default function Sidebar({
   stations = [],
   activeStationId = 1,
+  indicatorPalette,
   isOpen = false,
   onClose,
   onSelect,
@@ -19,6 +20,7 @@ export default function Sidebar({
 }: Readonly<{
   stations?: StationItem[];
   activeStationId?: number;
+  indicatorPalette?: string[];
   isOpen?: boolean;
   onClose?: () => void;
   onSelect?: (id: number) => void;
@@ -48,7 +50,8 @@ export default function Sidebar({
 
   classes.push('z-30');
 
-  const indicatorPalette = ["#39FF14", "#39FF14", "#FF1D25", "#FFD400"];
+  const defaultIndicatorPalette = ["#39FF14", "#39FF14", "#FF1D25", "#FFD400"];
+  const palette = indicatorPalette ?? defaultIndicatorPalette;
 
   return (
     <aside id="main-navigation" className={classes.join(' ')} style={{ fontFamily: 'TT Firs Neue Trial Var Roman, sans-serif' }}>
@@ -99,7 +102,7 @@ export default function Sidebar({
             {stations.map((st, index) => {
               const active = st.id === activeStationId;
               const indicatorColor =
-                indicatorPalette[index] ?? indicatorPalette[indicatorPalette.length - 1];
+                palette[index] ?? palette[palette.length - 1];
               const indicatorStyle: React.CSSProperties = {
                 backgroundColor: indicatorColor,
                 marginLeft: active ? -7 : 0,
