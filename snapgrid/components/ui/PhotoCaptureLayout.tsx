@@ -110,8 +110,8 @@ export default function PhotoCaptureLayout({ gridItems, config }: PhotoCaptureLa
   const [stickersOpen, setStickersOpen] = useState(false);
 
   return (
-    <div className={`${DINEng.className} grid grid-cols-1 md:grid-cols-3 gap-6`}>
-      <div className="md:col-span-2">
+    <div className={`${DINEng.className} grid grid-cols-1 md:grid-cols-2 gap-6`}>
+      <div>
         <PreviewPanel selected={selected} />
         {/* Pass props down to controls as needed */}
         <ControlsBar
@@ -129,7 +129,7 @@ export default function PhotoCaptureLayout({ gridItems, config }: PhotoCaptureLa
         )}
       </div>
       
-      <div className="md:col-span-1">
+      <div>
         {/* NOW WE USE THE CONFIG PROP DIRECTLY */}
         <PhotoGrid 
           items={gridItems} 

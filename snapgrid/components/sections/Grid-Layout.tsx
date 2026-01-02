@@ -103,10 +103,10 @@ function StationCard({ station, onSelect }: { station: Station; onSelect?: (id: 
           </div>
         );
       case 2:
-        // 3x3 grid - responsive squares
+        // 2x3 grid - responsive squares (use aspect-square so tiles match other layouts)
         return (
           <div className="grid grid-cols-3 gap-2 w-full">
-            {Array.from({ length: 9 }).map((_, i) => (
+            {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="aspect-square bg-neutral-800 border border-neutral-700 rounded-sm" />
             ))}
           </div>

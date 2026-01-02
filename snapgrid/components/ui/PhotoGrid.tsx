@@ -46,7 +46,7 @@ export default function PhotoGrid({
     : (grid.length === 1 ? 'grid-cols-1' : 'grid-cols-2');
 
   return (
-    <aside className={`${DINEng.className} w-full md:w-96 bg-[#0b0b0b] border border-[#222] rounded-md p-4 flex flex-col gap-4 ${className ?? ''}`}>
+    <aside className={`${DINEng.className} w-full bg-[#0b0b0b] border border-[#222] rounded-md p-4 flex flex-col gap-4 ${className ?? ''}`}>
       <div className="flex justify-between items-center">
         <h2 className="text-yellow-400 font-bold tracking-wider">{title}</h2>
         <div className="flex items-center gap-2">
