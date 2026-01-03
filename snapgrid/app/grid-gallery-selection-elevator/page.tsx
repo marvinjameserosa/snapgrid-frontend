@@ -120,7 +120,7 @@ function Polaroid({ photo }: { photo: PhotoCard }) {
 						<div className="flex aspect-square items-center justify-center text-xs font-semibold uppercase tracking-[0.4em] text-neutral-500">
 							{photo.caption}
 						</div>
-						<div className="h-4" aria-hidden />
+						<div className="h-10" aria-hidden />
 					</div>
 				)}
 				<div className="absolute -bottom-8 left-1/2 h-2 w-12 -translate-x-1/2 bg-yellow-300/70 blur-[2px]" aria-hidden />

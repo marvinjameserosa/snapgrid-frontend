@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Squares from "@/components/ui/bg-particles";
 import Sidebar from "@/components/ui/sidebar";
@@ -23,12 +24,12 @@ type ResultsView = "photo-strip" | "gallery-view";
 
 function StationBadge({ children }: { children: React.ReactNode }) {
 	return (
-		<span className="relative inline-flex items-center justify-center px-10 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-green-400">
-			<span className="absolute inset-0 border border-green-400/80" aria-hidden />
-			<span className="absolute -top-1 -left-1 h-3 w-3 bg-green-400" aria-hidden />
-			<span className="absolute -top-1 -right-1 h-3 w-3 bg-green-400" aria-hidden />
-			<span className="absolute -bottom-1 -left-1 h-3 w-3 bg-green-400" aria-hidden />
-			<span className="absolute -bottom-1 -right-1 h-3 w-3 bg-green-400" aria-hidden />
+		<span className="relative inline-flex items-center justify-center px-10 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#39FF14]">
+			<span className="absolute inset-0 border border-[#39FF14]/80" aria-hidden />
+			<span className="absolute -top-1 -left-1 h-3 w-3 bg-[#39FF14]" aria-hidden />
+			<span className="absolute -top-1 -right-1 h-3 w-3 bg-[#39FF14]" aria-hidden />
+			<span className="absolute -bottom-1 -left-1 h-3 w-3 bg-[#39FF14]" aria-hidden />
+			<span className="absolute -bottom-1 -right-1 h-3 w-3 bg-[#39FF14]" aria-hidden />
 			<span className="relative tracking-[0.4em]">{children}</span>
 		</span>
 	);
@@ -60,58 +61,92 @@ function PillButton({
 }
 
 function CircleShareButton({
-	href,
 	label,
 	accent,
 }: {
-	href: string;
 	label: string;
 	accent: "blue" | "red" | "sky" | "neutral";
 }) {
-	const accentClass =
+	const accentStyle =
 		accent === "blue"
-			? "border-blue-500 text-blue-400"
+			? { border: "border-blue-500", text: "text-blue-500" }
 			: accent === "red"
-				? "border-red-500 text-red-400"
+				? { border: "border-rose-500", text: "text-rose-500" }
 				: accent === "sky"
-					? "border-sky-500 text-sky-400"
-					: "border-neutral-700 text-neutral-500";
+					? { border: "border-sky-400", text: "text-sky-400" }
+					: { border: "border-neutral-700", text: "text-neutral-500" };
 
 	return (
-		<a
-			href={href}
-			target="_blank"
-			rel="noreferrer"
-			className="flex flex-col items-center gap-2"
-		>
+		<button type="button" className="flex flex-col items-center">
 			<span
 				className={
-					"h-16 w-16 rounded-full border bg-black/40 flex items-center justify-center text-xs font-semibold uppercase tracking-[0.25em] " +
-					accentClass
+					"h-24 w-24 rounded-full border-[3px] bg-black/40 flex items-center justify-center text-base font-extrabold uppercase tracking-[0.12em] " +
+					accentStyle.border +
+					" " +
+					accentStyle.text
 				}
 			>
-				{label.slice(0, 2)}
+				{label === "Facebook"
+					? "FB"
+					: label === "Instagram"
+						? "IG"
+						: label === "TikTok"
+							? "TK"
+							: label.slice(0, 2)}
 			</span>
-			<span className="text-[10px] uppercase tracking-[0.35em] text-neutral-400">
+			<span
+				className={
+					"mt-5 inline-flex items-center justify-center border px-6 py-2 text-xs font-bold uppercase tracking-[0.18em] " +
+					accentStyle.border +
+					" " +
+					accentStyle.text
+				}
+			>
 				{label}
 			</span>
-		</a>
+		</button>
 	);
 }
 
 function ResultsPreview({ view }: { view: ResultsView }) {
-	// Visual-only preview matching the screenshot; real photo wiring can be added once capture step persists images.
+	const [now, setNow] = useState(() => new Date());
+
+	useEffect(() => {
+		const id = window.setInterval(() => setNow(new Date()), 60_000);
+		return () => window.clearInterval(id);
+	}, []);
+
+	const dateLabel = useMemo(() => {
+		return new Intl.DateTimeFormat("en-US", {
+			weekday: "long",
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		}).format(now);
+	}, [now]);
+
+	const timeLabel = useMemo(() => {
+		return new Intl.DateTimeFormat("en-US", {
+			hour: "numeric",
+			minute: "2-digit",
+		}).format(now);
+	}, [now]);
+
 	const grid = (
-		<div className="grid grid-cols-2 gap-4">
+		<div className="grid grid-cols-2 gap-8">
 			{Array.from({ length: 4 }).map((_, index) => (
 				<div
 					key={index}
-					className="relative aspect-[4/5] border border-neutral-300 bg-neutral-100 overflow-hidden"
+					className="relative aspect-square border-4 border-black bg-black overflow-hidden"
 				>
-					<span className="absolute bottom-2 right-2 bg-yellow-400 text-black text-[10px] font-bold px-2 py-1">
+					<div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+						<span className="text-white text-xs font-semibold uppercase tracking-[0.22em]">
+							SLOT {String(index + 1).padStart(2, "0")} EMPTY
+						</span>
+					</div>
+					<span className="absolute bottom-3 right-3 bg-yellow-400 border-2 border-black text-black text-[11px] font-extrabold px-3 py-1">
 						{index + 1}
 					</span>
-					<div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.03),rgba(0,0,0,0.0),rgba(0,0,0,0.03))]" />
 				</div>
 			))}
 		</div>
@@ -119,7 +154,7 @@ function ResultsPreview({ view }: { view: ResultsView }) {
 
 	if (view === "gallery-view") {
 		return (
-			<div className="w-full max-w-2xl mx-auto bg-[#121212] border border-neutral-800/70 px-6 py-8 shadow-[0_50px_120px_rgba(0,0,0,0.65)]">
+			<div className="w-full bg-[#121212] border border-neutral-800/70 px-6 py-8 shadow-[0_50px_120px_rgba(0,0,0,0.65)]">
 				<div className="text-center text-xs uppercase tracking-[0.35em] text-neutral-400">
 					Gallery View
 				</div>
@@ -129,21 +164,33 @@ function ResultsPreview({ view }: { view: ResultsView }) {
 	}
 
 	return (
-		<div className="w-full max-w-3xl mx-auto bg-white border border-neutral-200 shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
+		<div className="w-full bg-white border border-neutral-200 shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
 			<div className="px-10 pt-10 pb-6 text-center">
-				<div className="text-2xl font-extrabold tracking-wide text-neutral-900">
+				<div className="text-3xl sm:text-4xl font-extrabold uppercase tracking-[0.12em] text-black">
 					SNAPGRID STATION
 				</div>
-				<div className="mt-1 text-[10px] uppercase tracking-[0.35em] text-neutral-500">
-					SUBWAY 1
+				<div className="mt-4 flex items-center justify-center gap-6">
+					<span className="h-px w-16 bg-black" aria-hidden />
+					<span className="text-[11px] font-bold uppercase tracking-[0.28em] text-black">
+						SUBWAY 1
+					</span>
+					<span className="h-px w-16 bg-black" aria-hidden />
 				</div>
-				<div className="mt-6 h-px bg-neutral-300" />
+				<div className="mt-3 text-[11px] text-neutral-600">
+					{dateLabel}  {timeLabel}
+				</div>
+				<div className="mt-8 h-1 bg-black" />
 			</div>
+
 			<div className="px-10 pb-10">{grid}</div>
-			<div className="px-10 pb-10">
-				<div className="h-px bg-neutral-300" />
-				<div className="mt-4 text-center text-[10px] uppercase tracking-[0.35em] text-neutral-500">
-					SNAPGRID-STATION
+
+			<div className="px-10 pb-10 text-center">
+				<div className="h-1 bg-black" />
+				<div className="mt-6 text-sm font-extrabold uppercase tracking-[0.18em] text-black">
+					SNAPGRID.STATION
+				</div>
+				<div className="mt-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">
+					DIGITAL PHOTOBOOTH EXPERIENCE  ARE YOU LOST IN THE CITY TOO?
 				</div>
 			</div>
 		</div>
@@ -155,6 +202,7 @@ export default function GridResultsPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [isDesktop, setIsDesktop] = useState(true);
 	const [view, setView] = useState<ResultsView>("photo-strip");
+	const previewWidthClass = view === "gallery-view" ? "max-w-2xl" : "max-w-3xl";
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -176,11 +224,6 @@ export default function GridResultsPage() {
 			document.body.style.overflow = "";
 		};
 	}, [isSidebarOpen, isDesktop]);
-
-	const shareUrl = useMemo(() => {
-		if (typeof window === "undefined") return "";
-		return window.location.href;
-	}, []);
 
 	const handlePrint = () => {
 		if (typeof window === "undefined") return;
@@ -254,7 +297,7 @@ export default function GridResultsPage() {
 							className={`mt-8 flex items-center justify-center gap-2 text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase ${DINEng.className}`}
 						>
 							<span className="tracking-[0.03em] text-white">Share</span>
-							<span className="tracking-[0.03em] text-green-400">Results</span>
+							<span className="tracking-[0.03em] text-[#39FF14]">Results</span>
 						</h1>
 						<p
 							className="mt-2 text-sm sm:text-base text-gray-400 tracking-[0.10em]"
@@ -263,8 +306,8 @@ export default function GridResultsPage() {
 							Your journey is complete. Download or share your memories.
 						</p>
 						<div className="mt-6 flex items-center justify-center">
-							<span className="inline-flex items-center justify-center gap-4 px-10 py-3 text-[11px] font-semibold uppercase tracking-[0.35em] border border-green-400/70 text-green-400 bg-black/35">
-								<span className="h-3 w-3 rounded-full bg-green-400" aria-hidden />
+							<span className="inline-flex items-center justify-center gap-4 px-10 py-3 text-[11px] font-semibold uppercase tracking-[0.35em] border border-[#39FF14]/70 text-[#39FF14] bg-black/35">
+								<span className="h-3 w-3 rounded-full bg-[#39FF14]" aria-hidden />
 								Journey Completed
 							</span>
 						</div>
@@ -274,87 +317,129 @@ export default function GridResultsPage() {
 								active={view === "photo-strip"}
 								onClick={() => setView("photo-strip")}
 							>
+								<Image
+									src="/results-icons/PHOTO%20STRIP%20ICON.png"
+									alt=""
+									width={18}
+									height={18}
+									className="h-[18px] w-[18px]"
+									aria-hidden
+								/>
 								PHOTO STRIP
 							</PillButton>
 							<PillButton
 								active={view === "gallery-view"}
 								onClick={() => setView("gallery-view")}
 							>
+								<Image
+									src="/results-icons/GALLERY%20VIEW%20ICON.png"
+									alt=""
+									width={18}
+									height={18}
+									className="h-[18px] w-[18px]"
+									aria-hidden
+								/>
 								GALLERY VIEW
 							</PillButton>
 						</div>
 					</div>
 
 					<section className="mt-12">
-						<ResultsPreview view={view} />
+						<div className={`mx-auto w-full ${previewWidthClass}`}>
+							<ResultsPreview view={view} />
+						</div>
 					</section>
 
-					<div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4 sm:gap-6">
-						<button
-							type="button"
-							className="flex items-center justify-center gap-4 bg-yellow-400 px-10 py-5 text-xs font-semibold uppercase tracking-[0.32em] text-black shadow-[0_20px_45px_rgba(250,204,21,0.25)] hover:bg-yellow-300 transition"
-							// Visual-only for now: capture step doesn’t persist a renderable asset yet
-							onClick={() => {
-								// no-op
-							}}
-						>
-							DOWNLOAD
-						</button>
-						<button
-							type="button"
-							className="flex items-center justify-center gap-4 bg-sky-500 px-10 py-5 text-xs font-semibold uppercase tracking-[0.32em] text-black shadow-[0_20px_45px_rgba(14,165,233,0.25)] hover:bg-sky-400 transition"
-							onClick={handleShare}
-						>
-							SHARE
-						</button>
-						<button
-							type="button"
-							className="flex items-center justify-center gap-4 border border-neutral-700 bg-neutral-900/80 px-10 py-5 text-xs font-semibold uppercase tracking-[0.32em] text-gray-100 shadow-[0_18px_40px_rgba(0,0,0,0.45)] hover:border-neutral-500 hover:bg-neutral-900 transition"
-							onClick={handlePrint}
-						>
-							PRINT
-						</button>
+					<div className={`mt-10 mx-auto w-full ${previewWidthClass}`}>
+						<div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
+							<button
+								type="button"
+								className="flex h-16 w-full flex-1 items-center justify-center gap-4 bg-yellow-400 px-10 text-xs font-semibold uppercase tracking-[0.32em] text-black shadow-[0_20px_45px_rgba(250,204,21,0.25)] transition hover:bg-yellow-300"
+								// Visual-only for now: capture step doesn’t persist a renderable asset yet
+								onClick={() => {
+									// no-op
+								}}
+							>
+								<Image
+									src="/results-icons/DOWNLOAD%20ICON.png"
+									alt=""
+									width={18}
+									height={18}
+									className="h-[18px] w-[18px]"
+									aria-hidden
+								/>
+								DOWNLOAD
+							</button>
+							<button
+								type="button"
+								className="flex h-16 w-full flex-1 items-center justify-center gap-4 bg-sky-500 px-10 text-xs font-semibold uppercase tracking-[0.32em] text-white shadow-[0_20px_45px_rgba(14,165,233,0.25)] transition hover:bg-sky-400"
+								onClick={handleShare}
+							>
+								<Image
+									src="/results-icons/SHARE%20ICON.png"
+									alt=""
+									width={18}
+									height={18}
+									className="h-[18px] w-[18px]"
+									aria-hidden
+								/>
+								SHARE
+							</button>
+							<button
+								type="button"
+								className="flex h-16 w-full flex-1 items-center justify-center gap-4 bg-neutral-800 px-10 text-xs font-semibold uppercase tracking-[0.32em] text-white shadow-[0_18px_40px_rgba(0,0,0,0.45)] transition hover:bg-neutral-700"
+								onClick={handlePrint}
+							>
+								<Image
+									src="/results-icons/PRINT%20ICON.png"
+									alt=""
+									width={18}
+									height={18}
+									className="h-[18px] w-[18px]"
+									aria-hidden
+								/>
+								PRINT
+							</button>
+						</div>
 					</div>
 
 					<section className="mt-14">
 						<div className="mx-auto max-w-4xl bg-[#0e0e0e] border border-neutral-800/70 px-6 py-10 shadow-[0_40px_90px_rgba(0,0,0,0.55)]">
 							<div className="text-center">
-								<div className="text-sm uppercase tracking-[0.35em] text-sky-400">
+								<div className="text-3xl sm:text-3xl font-bold uppercase tracking-[0.03em] text-sky-400">
 									Share on Transit Lines
 								</div>
-								<div className="mt-2 text-[11px] uppercase tracking-[0.35em] text-neutral-500">
+								<div className="mt-2 text-base font-bold uppercase tracking-[0.03em] text-neutral-500">
 									Choose your destination
 								</div>
 							</div>
 
-							<div className="mt-10 flex flex-wrap items-center justify-center gap-10">
+							<div className="mt-10 flex flex-wrap items-center justify-center gap-12">
 								<CircleShareButton
-									href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
 									label="Facebook"
 									accent="blue"
 								/>
 								<CircleShareButton
-									href={`https://www.instagram.com/`}
 									label="Instagram"
 									accent="red"
 								/>
 								<CircleShareButton
-									href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
 									label="Twitter"
 									accent="sky"
 								/>
 								<CircleShareButton
-									href={shareUrl}
-									label="More"
+									label="TikTok"
 									accent="neutral"
 								/>
 							</div>
 
-							<div className="mt-10 flex items-center justify-center gap-3">
-								<span className="h-2 w-2 rounded-full bg-green-500" />
-								<span className="text-[10px] uppercase tracking-[0.35em] text-neutral-500">
-									All Lines Operational
-								</span>
+							<div className="mt-10 flex items-center justify-center">
+								<div className="inline-flex items-center justify-center gap-4 border border-neutral-700/80 bg-black/20 px-10 py-3">
+									<span className="h-2.5 w-2.5 rounded-full bg-[#39FF14]" />
+									<span className="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-500">
+										All Lines Operational
+									</span>
+								</div>
 							</div>
 						</div>
 					</section>
@@ -362,9 +447,17 @@ export default function GridResultsPage() {
 					<div className="mt-12 flex items-center justify-center">
 						<button
 							type="button"
-							className="bg-red-600 px-14 py-6 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow-[0_20px_45px_rgba(220,38,38,0.45)] hover:bg-red-500 transition"
+							className="flex items-center justify-center gap-4 bg-red-600 px-14 py-6 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow-[0_20px_45px_rgba(220,38,38,0.45)] hover:bg-red-500 transition"
 							onClick={() => router.push("/")}
 						>
+							<Image
+								src="/results-icons/START%20NEW%20JOURNEY%20ICON.png"
+								alt=""
+								width={18}
+								height={18}
+								className="h-[18px] w-[18px]"
+								aria-hidden
+							/>
 							Start New Journey
 						</button>
 					</div>
