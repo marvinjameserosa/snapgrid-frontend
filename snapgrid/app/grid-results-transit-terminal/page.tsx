@@ -165,7 +165,7 @@ function ResultsPreview({ view }: { view: ResultsView }) {
 				<div className="mt-4 flex items-center justify-center gap-6">
 					<span className="h-px w-16 bg-black" aria-hidden />
 					<span className="text-[11px] font-bold uppercase tracking-[0.28em] text-black">
-						ELEVATOR
+						TRANSIT TERMINAL
 					</span>
 					<span className="h-px w-16 bg-black" aria-hidden />
 				</div>
