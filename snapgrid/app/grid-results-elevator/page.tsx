@@ -126,11 +126,11 @@ function ResultsPreview({ view }: { view: ResultsView }) {
 	}, [now]);
 
 	const grid = (
-		<div className="grid grid-cols-3 gap-6">
-			{Array.from({ length: 6 }).map((_, index) => (
+		<div className="grid grid-cols-1 gap-4">
+			{Array.from({ length: 4 }).map((_, index) => (
 				<div
 					key={index}
-					className="relative aspect-square border-4 border-black bg-black overflow-hidden"
+					className="relative aspect-[4/3] border-4 border-black bg-black overflow-hidden"
 				>
 					<div className="absolute inset-0 flex items-center justify-center px-6 text-center">
 						<span className="text-white text-xs font-semibold uppercase tracking-[0.22em]">
@@ -158,14 +158,14 @@ function ResultsPreview({ view }: { view: ResultsView }) {
 
 	return (
 		<div className="w-full bg-white border border-neutral-200 shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
-			<div className="px-10 pt-10 pb-6 text-center">
+			<div className="px-6 pt-6 pb-5 text-center">
 				<div className="text-3xl sm:text-4xl font-extrabold uppercase tracking-[0.12em] text-black">
 					SNAPGRID STATION
 				</div>
 				<div className="mt-4 flex items-center justify-center gap-6">
 					<span className="h-px w-16 bg-black" aria-hidden />
 					<span className="text-[11px] font-bold uppercase tracking-[0.28em] text-black">
-						SUBWAY 2
+						ELEVATOR
 					</span>
 					<span className="h-px w-16 bg-black" aria-hidden />
 				</div>
@@ -175,9 +175,9 @@ function ResultsPreview({ view }: { view: ResultsView }) {
 				<div className="mt-8 h-1 bg-black" />
 			</div>
 
-			<div className="px-10 pb-10">{grid}</div>
+			<div className="px-6 pb-6">{grid}</div>
 
-			<div className="px-10 pb-10 text-center">
+			<div className="px-6 pb-6 text-center">
 				<div className="h-1 bg-black" />
 				<div className="mt-6 text-sm font-extrabold uppercase tracking-[0.18em] text-black">
 					SNAPGRID.STATION
@@ -195,7 +195,7 @@ export default function GridResultsPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [isDesktop, setIsDesktop] = useState(true);
 	const [view, setView] = useState<ResultsView>("photo-strip");
-	const previewWidthClass = view === "gallery-view" ? "max-w-6xl" : "max-w-7xl";
+	const previewWidthClass = view === "gallery-view" ? "max-w-3xl" : "max-w-4xl";
 
 	useEffect(() => {
 		const handleResize = () => {
