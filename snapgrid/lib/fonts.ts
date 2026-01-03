@@ -22,13 +22,6 @@ export const DINEng = localFont({
   style: "normal",
 });
 
-export const DSDIGI = localFont({
-  src: "../public/fonts/DS-DIGI.ttf",
-  variable: "--font-DS-DIGI",
-  weight: "400",
-  style: "normal",
-});
-
 export const segmentAbold = localFont({
   src: "../public/fonts/SegmentAKeyTrial-Bold.otf",
   variable: "--font-segmentAbold",

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { DINEng, TTFirsNeue, segmentA, DSDIGI, segmentAbold } from "@/lib/fonts";
+import { DINEng, TTFirsNeue, segmentA, segmentAbold } from "@/lib/fonts";
 
 export type StationItem = {
   id: number;
@@ -81,7 +81,7 @@ export default function Sidebar({
 
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-6">
-            <div className={`rounded-full bg-red-500 text-white font-bold h-10 w-10 flex items-center justify-center text-lg ${DSDIGI.className}`}>5G</div>
+            <div className="rounded-full bg-red-500 text-white font-bold h-10 w-10 flex items-center justify-center text-lg font-dsdigi">5G</div>
             <p className="text-sm text-gray-400 uppercase tracking-wider font-semibold">SUBWAY LINE STATUS</p>
           </div>
 

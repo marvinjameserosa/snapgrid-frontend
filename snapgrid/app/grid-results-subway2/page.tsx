@@ -126,8 +126,8 @@ function ResultsPreview({ view }: { view: ResultsView }) {
 	}, [now]);
 
 	const grid = (
-		<div className="grid grid-cols-2 gap-8">
-			{Array.from({ length: 4 }).map((_, index) => (
+		<div className="grid grid-cols-3 gap-6">
+			{Array.from({ length: 6 }).map((_, index) => (
 				<div
 					key={index}
 					className="relative aspect-square border-4 border-black bg-black overflow-hidden"
@@ -195,7 +195,7 @@ export default function GridResultsPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [isDesktop, setIsDesktop] = useState(true);
 	const [view, setView] = useState<ResultsView>("photo-strip");
-	const previewWidthClass = view === "gallery-view" ? "max-w-2xl" : "max-w-3xl";
+	const previewWidthClass = view === "gallery-view" ? "max-w-6xl" : "max-w-7xl";
 
 	useEffect(() => {
 		const handleResize = () => {
