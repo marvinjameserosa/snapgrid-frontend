@@ -4,10 +4,6 @@ import { DINEng } from '@/lib/fonts';
 import PhotoGrid from './PhotoGrid';
 import StickerPanel from './StickerPanel';
 
-/* -------------------------------------------------------------------------- */
-/* SUB-COMPONENTS (RESTORED)                        */
-/* -------------------------------------------------------------------------- */
-
 /* Preview area with optional selected image. */
 export function PreviewPanel({ selected }: { selected?: string }) {
   return (
@@ -74,23 +70,81 @@ export function ControlsBar({ onToggleFilters, filtersOpen, onToggleStickers, st
 
 /* Filter thumbnail strip */
 export function FilterStrip() {
-  const thumbs = new Array(6).fill(0).map((_, i) => `/images/placeholder-${i + 1}.jpg`);
+  const filterFiles = [
+    'Blueberry-filter.jpg',
+    'candy-filter.jpg',
+    'lime-filter.jpg',
+    'memory-filter.jpg',
+    'nostalgia-filter.jpg',
+    'old-film-filter.jpg',
+    'rio-filter.jpg',
+    'sailor-filter.jpg',
+    'sepia-filter.jpg',
+    'sketch-filter.jpg',
+    'snow-filter.jpg',
+    'warm-filter.jpg',
+  ]
+  
+  // Face filters
+  const faceFiltersFiles = [
+    'swag-filter.png',
+    'cat-filter.png',
+    'bunny-filter.png',
+    'cool-filter.png',
+    'hearts-filter.png',
+    'flower-filter.png',
+  ]
+
+  ;
+
+  const toDisplayName = (filename: string) => {
+    const base = filename.replace(/-filter\.[a-z]+$/i, '').replace(/-/g, ' ');
+    return base.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+  };
+
   return (
-    <div className={`${DINEng.className} mt-4 bg-[#121212] p-3 border border-[#202020] rounded` }>
-      <div className="flex gap-3 overflow-x-auto py-2">
-        {thumbs.map((t, i) => (
-          <div key={i} className="min-w-[72px] h-16 bg-[#111] rounded overflow-hidden border border-[#222]">
-            <img src={t} alt={`filter-${i}`} className="h-full w-full object-cover" />
-          </div>
-        ))}
+    <div className={`${DINEng.className} mt-6 bg-[#111] p-4 border border-[#202020] rounded-lg`}>
+      <div className="text-sm font-bold text-yellow-400 uppercase mb-3">Add Filters</div>
+
+      {/* Wrapper with vertical scroll for both filter sections */}
+      <div className="overflow-y-auto max-h-[640px] pr-2">
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          {filterFiles.map((f, i) => {
+            const src = `/filters/${f}`;
+            const name = toDisplayName(f);
+            return (
+              <div key={i} className="relative bg-[#111] rounded overflow-hidden border border-[#222] h-36 flex items-center justify-center">
+                <img src={src} alt={name} className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
+                  <div className="text-sm font-semibold text-white uppercase text-center px-2">{name}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Face Filters Section */}
+        <div className="text-sm font-bold text-yellow-400 uppercase mb-3 mt-2">Face Filters</div>
+        <div className="grid grid-cols-3 gap-4">
+          {faceFiltersFiles.map((f, i) => {
+            const src = `/filters/${f}`;
+            const name = toDisplayName(f);
+            return (
+              <div key={i} className="relative bg-[#111] rounded overflow-hidden border border-[#222] h-36 flex items-center justify-center">
+                <img src={src} alt={name} className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
+                  <div className="text-sm font-semibold text-white uppercase text-center px-2">{name}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* MAIN COMPONENT                                 */
-/* -------------------------------------------------------------------------- */
+// MAIN COMPONENT                                   
 
 interface LayoutConfig {
   size: number;
@@ -130,7 +184,7 @@ export default function PhotoCaptureLayout({ gridItems, config }: PhotoCaptureLa
       </div>
       
       <div>
-        {/* NOW WE USE THE CONFIG PROP DIRECTLY */}
+        
         <PhotoGrid 
           items={gridItems} 
           size={config.size}       
