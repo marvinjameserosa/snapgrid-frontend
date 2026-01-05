@@ -10,7 +10,7 @@ type Station = {
   subtitle?: string;
 };
 
-// Values for each station
+// Values for the Grid Layout Cards
 const stations: Station[] = [
   { id: 1, title: "SUBWAY 1", subtitle: "4-Cut Train Car" },
   { id: 2, title: "SUBWAY 2", subtitle: "Subway Doors" },
@@ -18,7 +18,7 @@ const stations: Station[] = [
   { id: 4, title: "TRANSIT TERMINAL", subtitle: "Route Maps" },
 ];
 
-// Journey steps for sidebar
+// Journey steps for Sidebar Navigation
 const journeySteps: Station[] = [
   { id: 1, title: "STATION 01", subtitle: "SELECT LAYOUT" },
   { id: 2, title: "STATION 02", subtitle: "CAPTURE PHOTOS" },
@@ -26,7 +26,8 @@ const journeySteps: Station[] = [
   { id: 4, title: "STATION 04", subtitle: "SHARE RESULTS" },
 ];
 
-// are youer badge
+// --- Sub Components ---
+
 function StationBadge({ children }: { children: React.ReactNode }) {
   return (
     <span className="relative inline-flex items-center justify-center px-10 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#f2c200]">
@@ -40,7 +41,6 @@ function StationBadge({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Button 1
 function Button({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button
@@ -55,49 +55,23 @@ function Button({ children, onClick }: { children: React.ReactNode; onClick?: ()
   );
 }
 
-// Station card
 function StationCard({ station, onSelect }: { station: Station; onSelect?: (id: number) => void }) {
   const renderIcon = (id: number) => {
     switch (id) {
       case 1:
-        return (
-          <img
-            src="/icons/Grid%20(gray).png"
-            alt="Grid icon"
-            className="h-[80%] w-[80%] object-contain"
-          />
-        );
+        return <img src="/icons/Grid%20(gray).png" alt="Grid icon" className="h-[80%] w-[80%] object-contain" />;
       case 2:
-        return (
-          <img
-            src="/icons/door-open.png"
-            alt="Grid icon"
-            className="h-[80%] w-[80%] object-contain"
-          />
-        );
+        return <img src="/icons/door-open.png" alt="Grid icon" className="h-[80%] w-[80%] object-contain" />;
       case 3:
-        return (
-          <img
-            src="/icons/up-down.png"
-            alt="Elevator icon"
-            className="h-[80%] w-[80%] object-contain"
-          />
-        );
+        return <img src="/icons/up-down.png" alt="Elevator icon" className="h-[80%] w-[80%] object-contain" />;
       default:
-        return (
-          <img
-            src="/icons/map%20(gray).png"
-            alt="Map icon"
-            className="h-[80%] w-[80%] object-contain"
-          />
-        );
+        return <img src="/icons/map%20(gray).png" alt="Map icon" className="h-[80%] w-[80%] object-contain" />;
     }
   };
 
   const renderPreview = (id: number) => {
     switch (id) {
       case 1:
-        // 2x2 grid
         return (
           <div className="grid grid-cols-2 gap-2 w-full">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -106,7 +80,6 @@ function StationCard({ station, onSelect }: { station: Station; onSelect?: (id: 
           </div>
         );
       case 2:
-        // 2x3 grid
         return (
           <div className="grid grid-cols-3 gap-2 w-full">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -159,26 +132,23 @@ function StationCard({ station, onSelect }: { station: Station; onSelect?: (id: 
   );
 }
 
+// --- Main Page Component ---
+
 export default function GridLayout() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeStationId, setActiveStationId] = useState<number>(1);
   const [isDesktop, setIsDesktop] = useState<boolean>(true);
 
-  // Single-page layout selection state
-  const [selectedLayout, setSelectedLayout] = useState<'select' | 'subway_1' | 'subway_2' | 'elevator' | 'transit_terminal'>('select');
-
-  // Photos state is kept at the parent so it survives layout switches
-  const [photos, setPhotos] = useState<string[]>([]);
+  // We default to 1 because this IS the Layout Selection page (Station 01)
+  const [activeStationId, setActiveStationId] = useState<number>(1);
 
   useEffect(() => {
-    // Lock body scroll when sidebar is open on small screens (only on mobile)
     const shouldLockScroll = !isDesktop && isSidebarOpen;
     document.body.style.overflow = shouldLockScroll ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isSidebarOpen]);
+  }, [isSidebarOpen, isDesktop]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -189,7 +159,6 @@ export default function GridLayout() {
   }, []);
 
   useEffect(() => {
-    // set collapse threshold at 1000px
     const checkWidth = () => {
       const desktop = window.innerWidth >= 1000;
       setIsDesktop(desktop);
@@ -201,23 +170,18 @@ export default function GridLayout() {
     return () => window.removeEventListener('resize', checkWidth);
   }, []);
 
-  // --- FIX START: Logic to handle Sidebar clicks ---
+  // Sidebar Nav Logic
   const handleSidebarSelect = (id: number) => {
-      setActiveStationId(id);
-      // Navigate if they click the sidebar buttons
-      if (id === 2) router.push('/capture-photos'); 
-      // Add other routes here if you have them (e.g., id === 3 -> /gallery)
+    setActiveStationId(id); // mag rered
+    
   };
-  // --- FIX END ---
 
   return (
     <div className="min-h-screen flex bg-[#0a0a0a] text-gray-100">
-      {/* Fixed burger button visible when sidebar is closed on mobile */}
+      {/* Mobile Menu Button */}
       {!isDesktop && !isSidebarOpen && (
         <button
           aria-label="Open navigation"
-          aria-controls="main-navigation"
-          aria-expanded={isSidebarOpen}
           onClick={() => setIsSidebarOpen(true)}
           className="fixed top-4 left-4 z-40 p-2 rounded focus:outline-none"
         >
@@ -229,24 +193,23 @@ export default function GridLayout() {
         </button>
       )}
       
+      {/* Sidebar Component */}
       <Sidebar
         stations={journeySteps}
         activeStationId={activeStationId}
         isOpen={isSidebarOpen}
         isDesktop={isDesktop}
         onClose={() => setIsSidebarOpen(false)}
-        
-        // --- FIX: Use the handler we made above so Sidebar buttons work ---
-        onSelect={handleSidebarSelect} 
-        
+        onSelect={handleSidebarSelect}
         onToggle={() => setIsSidebarOpen((v) => !v)}
       />
 
-      {/* Main content (with background canvas) */}
+      {/* Main Content */}
       <main className="relative flex-1 p-12">
-        {/* Mobile overlay when sidebar is open */}
+        {/* Mobile Overlay */}
         <div className={`${(!isDesktop && isSidebarOpen) ? 'block' : 'hidden'} fixed inset-0 bg-black/40 z-20`} onClick={() => setIsSidebarOpen(false)} />
-        {/* Background canvas positioned inside main so it scales with the content width */}
+        
+        {/* Background Particles */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Squares 
             speed={0.5}
@@ -256,6 +219,7 @@ export default function GridLayout() {
             hoverFillColor={'rgba(255,255,255,0.02)'}
           />
         </div>
+
         <div className="relative max-w-6xl mx-auto z-10">
           <div className="text-center mb-12">
             <StationBadge>STATION 01</StationBadge>
@@ -273,18 +237,13 @@ export default function GridLayout() {
 
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {stations.map((s) => (
-              <StationCard key={s.id} station={s} onSelect={(id) => {
-                // set selected layout for internal state (optional)
-                switch(id){
-                  case 1: setSelectedLayout('subway_1'); break;
-                  case 2: setSelectedLayout('subway_2'); break;
-                  case 3: setSelectedLayout('elevator'); break;
-                  default: setSelectedLayout('transit_terminal'); break;
-                }
-                
-                // --- FIX: Changed path to /capture-photos so it actually loads ---
-                router.push(`/capture-photos?station=${id}`);
-              }} />
+              <StationCard 
+                key={s.id} 
+                station={s} 
+                onSelect={(id) => {
+                  router.push(`/capture-photos?station=${id}`);
+                }} 
+              />
             ))}
           </section>
         </div>

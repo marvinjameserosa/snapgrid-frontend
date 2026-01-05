@@ -8,6 +8,14 @@ export type StationItem = {
   subtitle?: string;
 };
 
+// Configurable Colors (Easy to change later)
+const COLORS = {
+  COMPLETED: "#39FF14", // Green for finished stations
+  ACTIVE: "#FF1D25",    // Red for the current station
+  FUTURE: "#FFD400",    // Yellow for upcoming stations
+  LINE: "#2F2F2F",      // Dark gray for the connector line
+};
+
 export default function Sidebar({
   stations = [],
   activeStationId = 1,
@@ -48,7 +56,8 @@ export default function Sidebar({
 
   classes.push('z-30');
 
-  const indicatorPalette = ["#39FF14", "#39FF14", "#FF1D25", "#FFD400"];
+  // Find the index of the active station to determine what is "past" and "future"
+  const activeIndex = stations.findIndex(s => s.id === activeStationId);
 
   return (
     <aside id="main-navigation" className={classes.join(' ')} style={{ fontFamily: 'TT Firs Neue Trial Var Roman, sans-serif' }}>
@@ -68,14 +77,16 @@ export default function Sidebar({
       )}
 
       <div className="flex-1 flex flex-col">
+        {/* Header Section */}
         <div className="mb-6">
           <h2 className={`text-5xl font-extrabold tracking-wide text-white tracking-tight ${segmentA.className}`}>
             SnapGrid <span className="text-yellow-400">Station</span>
           </h2>
           <p className="text-xs text-gray-400 mt-1">Are you lost in the city too?</p>
-          <hr className="border-gray-500"></hr>
+          <hr className="border-gray-500 mt-4"></hr>
         </div>
 
+        {/* Status Section */}
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-6">
             <div className={`rounded-full bg-red-500 text-white font-bold h-10 w-10 flex items-center justify-center text-lg ${DSDIGI.className}`}>5G</div>
@@ -90,48 +101,71 @@ export default function Sidebar({
             <h4 className={`text-lg text-yellow-400 uppercase tracking-wide font-semibold ${DINEng.className}`}>Your Journey</h4>
           </div>
 
+          {/* Navigation/Station List */}
           <nav className="relative space-y-4">
+            {/* The vertical gray line behind the dots */}
             <span
               aria-hidden
               className="pointer-events-none absolute top-[10px] bottom-[10px] w-[2px]"
-              style={{ left: 12, backgroundColor: "#2F2F2F" }}
+              style={{ left: 12, backgroundColor: COLORS.LINE }}
             />
+            
             {stations.map((st, index) => {
-              const active = st.id === activeStationId;
-              const indicatorColor =
-                indicatorPalette[index] ?? indicatorPalette[indicatorPalette.length - 1];
+              const isActive = st.id === activeStationId;
+              
+              // Logic: If current index is less than active index, it's completed (Green).
+              // If it matches, it's active (Red).
+              // Otherwise, it's future (Yellow).
+              let statusColor = COLORS.FUTURE; 
+              if (index < activeIndex) statusColor = COLORS.COMPLETED;
+              if (isActive) statusColor = COLORS.ACTIVE;
+
+              // Active dot is slightly larger and shifted left, others are standard
               const indicatorStyle: React.CSSProperties = {
-                backgroundColor: indicatorColor,
-                marginLeft: active ? -7 : 0,
+                backgroundColor: statusColor,
+                marginLeft: isActive ? -7 : 0,
+                width: isActive ? '20px' : '12px', // Make active dot slightly larger
+                height: isActive ? '20px' : '12px',
+                transition: 'all 0.3s ease'
               };
-              const subtitleTone =
-                st.subtitle?.trim().toUpperCase() === "PHOTO GALLERY" ? "text-white" : "text-gray-400";
+
+              // Text Color Logic
+              const titleColor = isActive ? "text-white" : "text-yellow-400";
+              const subtitleColor = isActive ? "text-white" : "text-gray-400";
+
               return (
                 <div
                   key={st.id}
-                  className="w-full flex items-start gap-4 text-left"
+                  className="w-full flex items-start gap-4 text-left group"
                 >
+                  {/* The Dot */}
                   <span
-                    className="mt-1 h-3 w-3 rounded-full flex-none flex-shrink-0"
+                    className="mt-1 rounded-full flex-none flex-shrink-0 z-10"
                     style={indicatorStyle}
                   />
+                  
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold uppercase text-yellow-400">{st.title}</p>
-                      {active && (
+                      <p className={`text-sm font-semibold uppercase ${titleColor}`}>
+                        {st.title}
+                      </p>
+                      
+                      {/* IN TRANSIT Badge - Only for Active Station */}
+                      {isActive && (
                         <span
                           className="ml-4 bg-red-500 text-white text-xs px-3 py-1"
                           style={{
-                            borderRadius: 0,
-                            fontFamily: "Arial, Helvetica, sans-serif",
                             fontSize: "0.6rem",
+                            fontFamily: "Arial, Helvetica, sans-serif"
                           }}
                         >
                           IN TRANSIT
                         </span>
                       )}
                     </div>
-                    <p className={`text-sm uppercase font-semibold mt-0.10 ${subtitleTone} ${DINEng.className}`}>{st.subtitle}</p>
+                    <p className={`text-sm uppercase font-semibold mt-0.5 ${subtitleColor} ${DINEng.className}`}>
+                      {st.subtitle}
+                    </p>
                   </div>
                 </div>
               );
