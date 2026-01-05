@@ -38,3 +38,15 @@ export const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+
+export const DSDIGI = localFont({
+  src: [
+    {
+      path: './DS-DIGI.ttf', 
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-dsdigi',
+});
