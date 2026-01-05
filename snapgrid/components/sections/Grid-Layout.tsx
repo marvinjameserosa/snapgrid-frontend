@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Squares from '@/components/ui/bg-particles';
 import Sidebar from '@/components/ui/sidebar';
-  
+import { useRouter } from 'next/navigation';
+
 type Station = {
   id: number;
   title: string;
@@ -26,10 +27,15 @@ const journeySteps: Station[] = [
 ];
 
 // are youer badge
-function SmallBadge({ children }: { children: React.ReactNode }) {
+function StationBadge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 px-3 py-1 border border-yellow-400 text-yellow-400 text-xs ">
-      {children}
+    <span className="relative inline-flex items-center justify-center px-10 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#f2c200]">
+      <span className="absolute inset-0 border border-[#f2c200]/80" aria-hidden />
+      <span className="absolute -top-1 -left-1 h-3 w-3  bg-[#f2c200]" aria-hidden />
+      <span className="absolute -top-1 -right-1 h-3 w-3  bg-[#f2c200]" aria-hidden />
+      <span className="absolute -bottom-1 -left-1 h-3 w-3  bg-[#f2c200]" aria-hidden />
+      <span className="absolute -bottom-1 -right-1 h-3 w-3 bg-[#f2c200]" aria-hidden />
+      <span className="relative tracking-[0.4em]">{children}</span>
     </span>
   );
 }
@@ -38,7 +44,10 @@ function SmallBadge({ children }: { children: React.ReactNode }) {
 function Button({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick?.();
+      }}
       className="text-xs border border-gray-600 text-gray-300 hover:bg-gray-800 px-4 py-2 w-full rounded transition"
     >
       {children}
@@ -47,11 +56,10 @@ function Button({ children, onClick }: { children: React.ReactNode; onClick?: ()
 }
 
 // Station card
-function StationCard({ station }: { station: Station }) {
+function StationCard({ station, onSelect }: { station: Station; onSelect?: (id: number) => void }) {
   const renderIcon = (id: number) => {
     switch (id) {
       case 1:
-        // Subway 1: use Grid image from public/icons
         return (
           <img
             src="/icons/Grid%20(gray).png"
@@ -60,7 +68,6 @@ function StationCard({ station }: { station: Station }) {
           />
         );
       case 2:
-        // Subway 2 keeps the SVG
         return (
           <img
             src="/icons/door-open.png"
@@ -69,7 +76,6 @@ function StationCard({ station }: { station: Station }) {
           />
         );
       case 3:
-        // Elevator: use up-down image
         return (
           <img
             src="/icons/up-down.png"
@@ -78,7 +84,6 @@ function StationCard({ station }: { station: Station }) {
           />
         );
       default:
-        // Transit Terminal: use map image
         return (
           <img
             src="/icons/map%20(gray).png"
@@ -92,7 +97,7 @@ function StationCard({ station }: { station: Station }) {
   const renderPreview = (id: number) => {
     switch (id) {
       case 1:
-        // 2x2 grid - responsive squares
+        // 2x2 grid
         return (
           <div className="grid grid-cols-2 gap-2 w-full">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -101,10 +106,10 @@ function StationCard({ station }: { station: Station }) {
           </div>
         );
       case 2:
-        // 3x3 grid - responsive squares
+        // 2x3 grid
         return (
           <div className="grid grid-cols-3 gap-2 w-full">
-            {Array.from({ length: 9 }).map((_, i) => (
+            {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="aspect-square bg-neutral-800 border border-neutral-700 rounded-sm" />
             ))}
           </div>
@@ -148,16 +153,23 @@ function StationCard({ station }: { station: Station }) {
       </div>
 
       <div className="w-full mt-6">
-        <Button>— BOARD THIS TRAIN</Button>
+        <Button onClick={() => onSelect?.(station.id)}>— BOARD THIS TRAIN</Button>
       </div>
     </article>
   );
 }
 
 export default function GridLayout() {
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeStationId, setActiveStationId] = useState<number>(1);
   const [isDesktop, setIsDesktop] = useState<boolean>(true);
+
+  // Single-page layout selection state
+  const [selectedLayout, setSelectedLayout] = useState<'select' | 'subway_1' | 'subway_2' | 'elevator' | 'transit_terminal'>('select');
+
+  // Photos state is kept at the parent so it survives layout switches
+  const [photos, setPhotos] = useState<string[]>([]);
 
   useEffect(() => {
     // Lock body scroll when sidebar is open on small screens (only on mobile)
@@ -188,8 +200,17 @@ export default function GridLayout() {
     window.addEventListener('resize', checkWidth);
     return () => window.removeEventListener('resize', checkWidth);
   }, []);
+
+  // --- FIX START: Logic to handle Sidebar clicks ---
+  const handleSidebarSelect = (id: number) => {
+      setActiveStationId(id);
+      // Navigate if they click the sidebar buttons
+      if (id === 2) router.push('/capture-photos'); 
+      // Add other routes here if you have them (e.g., id === 3 -> /gallery)
+  };
+  // --- FIX END ---
+
   return (
-   
     <div className="min-h-screen flex bg-[#0a0a0a] text-gray-100">
       {/* Fixed burger button visible when sidebar is closed on mobile */}
       {!isDesktop && !isSidebarOpen && (
@@ -207,13 +228,17 @@ export default function GridLayout() {
           </div>
         </button>
       )}
+      
       <Sidebar
         stations={journeySteps}
         activeStationId={activeStationId}
         isOpen={isSidebarOpen}
         isDesktop={isDesktop}
         onClose={() => setIsSidebarOpen(false)}
-        onSelect={(id) => setActiveStationId(id)}
+        
+        // --- FIX: Use the handler we made above so Sidebar buttons work ---
+        onSelect={handleSidebarSelect} 
+        
         onToggle={() => setIsSidebarOpen((v) => !v)}
       />
 
@@ -233,7 +258,7 @@ export default function GridLayout() {
         </div>
         <div className="relative max-w-6xl mx-auto z-10">
           <div className="text-center mb-12">
-            <SmallBadge>STATION 01</SmallBadge>
+            <StationBadge>STATION 01</StationBadge>
             <h1 className="mt-6 tracking-tight">
               <span className="block text-6xl font-normal leading-none">SELECT YOUR</span>
               <span className="block text-6xl font-extrabold leading-none text-yellow-400">STATION</span>
@@ -248,12 +273,22 @@ export default function GridLayout() {
 
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {stations.map((s) => (
-              <StationCard key={s.id} station={s} />
+              <StationCard key={s.id} station={s} onSelect={(id) => {
+                // set selected layout for internal state (optional)
+                switch(id){
+                  case 1: setSelectedLayout('subway_1'); break;
+                  case 2: setSelectedLayout('subway_2'); break;
+                  case 3: setSelectedLayout('elevator'); break;
+                  default: setSelectedLayout('transit_terminal'); break;
+                }
+                
+                // --- FIX: Changed path to /capture-photos so it actually loads ---
+                router.push(`/capture-photos?station=${id}`);
+              }} />
             ))}
           </section>
         </div>
       </main>
     </div>
-
   );
 }
