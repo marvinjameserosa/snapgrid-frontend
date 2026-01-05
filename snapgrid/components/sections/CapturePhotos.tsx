@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect, Suspense } from "react"; 
-import { useSearchParams } from 'next/navigation'; 
+import { useSearchParams, useRouter } from 'next/navigation'; 
 import Squares from '@/components/ui/bg-particles';
 import Sidebar from '@/components/ui/sidebar';
+
 import PhotoCaptureLayout from '@/components/ui/PhotoCaptureLayout';
 
-// --- DATA: THE LAYOUT DEFINITIONS ---
-// These match the IDs sent from your GridLayout page (1, 2, 3, 4)
+//DATA: THE LAYOUT DEFINITIONS ---
 const LAYOUT_CONFIGS: Record<string, { size: number; columns: number; title: string }> = {
   '1': { size: 4, columns: 2, title: 'SUBWAY 1' },     // 4-Cut
   '2': { size: 6, columns: 3, title: 'SUBWAY 2' },     // Doors
@@ -27,19 +27,23 @@ const journeySteps: Station[] = [
   { id: 4, title: "STATION 04", subtitle: "SHARE RESULTS" },
 ];
 
-function SmallBadge({ children }: { children: React.ReactNode }) {
+function StationBadge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 px-3 py-1 border border-red-600 text-red-600 text-xs font-bold ">
-      {children}
+    <span className="relative inline-flex items-center justify-center px-10 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#ff1414]">
+      <span className="absolute inset-0 border border-[#ff1414]/80" aria-hidden />
+      <span className="absolute -top-1 -left-1 h-3 w-3  bg-[#ff1414]" aria-hidden />
+      <span className="absolute -top-1 -right-1 h-3 w-3  bg-[#ff1414]" aria-hidden />
+      <span className="absolute -bottom-1 -left-1 h-3 w-3  bg-[#ff1414]" aria-hidden />
+      <span className="absolute -bottom-1 -right-1 h-3 w-3 bg-[#ff1414]" aria-hidden />
+      <span className="relative tracking-[0.4em]">{children}</span>
     </span>
   );
 }
 
-function CapturePhotosContent() {
+
+  function CapturePhotosContent() {
     const searchParams = useSearchParams();
     
-    // FIX: We now look for 'station' to match your GridLayout page
-    // Example: /capture-photos?station=2
     const currentStationId = searchParams.get('station') || '1';
     
     // Get the config based on the station ID
@@ -91,12 +95,12 @@ function CapturePhotosContent() {
 
           <div className="relative max-w-6xl mx-auto z-10">
             <div className="text-center mb-8">
-              <SmallBadge>STATION 02</SmallBadge>
+              <StationBadge>STATION 02</StationBadge>
               <h1 className="mt-6 tracking-tight">
                 <p className="block text-4xl md:text-6xl font-normal leading-none">CAPTURE <span className="inline text-4xl md:text-6xl font-extrabold leading-none text-red-600">PHOTOS</span></p>
               </h1>
 
-              {/* CLEANED UP: No buttons here anymore. Just the progress info. */}
+            
               <p className="mt-3 text-gray-400 flex items-center justify-center gap-3">
                  <span className="h-px w-8 bg-gray-600" />
                  0/{activeConfig.size} PHOTOS CAPTURED
@@ -104,8 +108,7 @@ function CapturePhotosContent() {
               </p>
             </div>
 
-            {/* The config is passed down based on the URL ?station=X */}
-            <PhotoCaptureLayout config={activeConfig} />
+        <PhotoCaptureLayout config={activeConfig} />
 
           </div>
         </main>
