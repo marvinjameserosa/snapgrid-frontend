@@ -1,6 +1,7 @@
 "use client";
+import localFont from 'next/font/local';
 import React from "react";
-import { DINEng, TTFirsNeue, segmentA, DSDIGI, segmentAbold } from "@/lib/fonts";
+import { DINEng, TTFirsNeue, segmentA,DSDIGI, segmentAbold } from "@/lib/fonts";
 
 export type StationItem = {
   id: number;
@@ -8,12 +9,12 @@ export type StationItem = {
   subtitle?: string;
 };
 
-// Configurable Colors (Easy to change later)
+// Configurable Colors
 const COLORS = {
-  COMPLETED: "#39FF14", // Green for finished stations
-  ACTIVE: "#FF1D25",    // Red for the current station
-  FUTURE: "#FFD400",    // Yellow for upcoming stations
-  LINE: "#2F2F2F",      // Dark gray for the connector line
+  COMPLETED: "#39FF14", 
+  ACTIVE: "#FF1D25",    
+  FUTURE: "#FFD400",   
+  LINE: "#2F2F2F",      
 };
 
 export default function Sidebar({

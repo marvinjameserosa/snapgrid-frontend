@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import Squares from "../ui/bg-particles";
-import { DINEng, TTFirsNeue, segmentA, DSDIGI, segmentAbold } from "@/lib/fonts";
+import { DINEng, TTFirsNeue, segmentA, segmentAbold } from "@/lib/fonts";
 import Link from "next/link";
 
 
@@ -113,7 +113,7 @@ export default function Hero() {
             <span className="text-neutral-500">{systemTimestamp}</span>
           </div>
 
-          <div className={`${DSDIGI.className} flex items-center gap-6 border-red-500 bg-red-600/95 px-4 py-2 text-xl uppercase tracking-[100rem]]`}>
+          <div className="font-dsdigi flex items-center gap-6 border-red-500 bg-red-600/95 px-4 py-2 text-xl uppercase tracking-[100rem]]">
             <span className="flex items-center">
               <BusIcon />
             </span>
@@ -147,7 +147,7 @@ export default function Hero() {
             ))}
           </div>
 
-          <div className={`${DSDIGI.className} flex flex-col items-center gap-3 text-center`}>
+          <div className="font-dsdigi flex flex-col items-center gap-3 text-center">
             <div className="relative">
               <span className="pointer-events-none absolute inset-x-4 -bottom-6 h-12 -translate-y-1/2 rounded-full bg-red-500/45 blur-2xl" />
               <Link href={"/grid-layout-selection"}>

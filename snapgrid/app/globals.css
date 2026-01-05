@@ -33,6 +33,20 @@
   font-display: swap;
 }
 
+/* DS-DIGI local font (loaded via CSS to avoid Turbopack next/font/local issues) */
+@font-face {
+  font-family: 'DS-DIGI';
+  src: url('/fonts/DS-DIGI.TTF') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-dsdigi {
+  font-family: 'DS-DIGI', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
